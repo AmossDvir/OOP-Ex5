@@ -6,5 +6,6 @@ public class Sjavac {
      * @param args: String array containing arguments.
      */
     public static void main(String[] args) {
+
     }
 }
