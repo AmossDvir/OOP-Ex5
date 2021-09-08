@@ -8,7 +8,7 @@ import java.util.List;
  *
  */
 public class FileReader {
-
+//Miryam
     /**
      * Reads a file and store the lines in a List.
      *
