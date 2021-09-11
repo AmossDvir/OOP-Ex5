@@ -1,6 +1,11 @@
 package syntaxchecking;
 
+/**
+ * a Constants class represents the reserved words in S-java.
+ */
 public class ReservedWords {
+
+    // Constants:
     public static final String FINAL = "final";
     public static final String VOID = "void";
     public static final String WHILE = "while";

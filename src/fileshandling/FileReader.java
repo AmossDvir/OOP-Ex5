@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * a simple static class for reading a given file.
  */
 public class FileReader {
 
@@ -13,8 +13,8 @@ public class FileReader {
      * Reads a file and store the lines in a List.
      *
      * @param filePath: a path to the file.
-     * @throws IOException: if something is bad with the given file.
      * @return List<String> the lines of the file.
+     * @throws IOException: if something is bad with the given file.
      */
     public static List<String> readFile(String filePath) throws IOException {
         List<String> fileLines = new ArrayList<>();
