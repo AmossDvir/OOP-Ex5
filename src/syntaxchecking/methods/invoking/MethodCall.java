@@ -1,6 +1,6 @@
 package syntaxchecking.methods.invoking;
 
-import syntaxchecking.methods.exceptions.DeclartionException;
+
 import syntaxchecking.methods.exceptions.InvokingException;
 import utilities.Pair;
 
@@ -31,7 +31,7 @@ public class MethodCall {
             throw new InvokingException();
         }
 
-        List<String> paramsList = Arrays.stream(methodCalledParams.split(SPLIT_PARAMS)).toList();
+        List<String> paramsList = Arrays.asList(methodCalledParams.split(SPLIT_PARAMS));
         if (paramsList.size() != countOccurrences(methodCalledParams, COMMA) + 1) {
             throw new InvokingException();
         }

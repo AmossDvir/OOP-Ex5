@@ -49,7 +49,7 @@ public class Condition {
      */
     public void checkCondition() throws ConditionLogicException {
         // Split sub-conditions and store them into a list:
-        List<String> conditionsList = Arrays.stream(condition.split(SPLIT_SUB_CONDITIONS)).toList();
+        List<String> conditionsList = Arrays.asList(condition.split(SPLIT_SUB_CONDITIONS));
         // Check sum of operators dividing the sub conditions:
         if (conditionsList.size() !=
                 (countOccurrences(condition, OR_OPERATOR)) + (countOccurrences(condition, AND_OPERATOR)) +

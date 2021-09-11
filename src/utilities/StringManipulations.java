@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 
+
 import static utilities.RegexExpressions.*;
 
 public class StringManipulations {
@@ -65,6 +66,6 @@ public class StringManipulations {
 
     public  static  List<String>  splitToWords(String str){
         String params = fixBlankSpots(str);
-        return  Arrays.stream(params.split(WHITE_SPACE)).toList();
+        return Arrays.asList(params.split(WHITE_SPACE));
     }
 }

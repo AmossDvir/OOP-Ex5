@@ -38,7 +38,7 @@ public class VoidDeclaration {
         }
         // take out the parameters:
         String params = extractFromParantheses(line);
-        List<String> paramsList = Arrays.stream(params.split(SPLIT_PARAMS)).toList();
+        List<String> paramsList = Arrays.asList(params.split(SPLIT_PARAMS));
 
         if (paramsList.size() != countOccurrences(params, COMMA) + 1) {
             throw new DeclarationException();

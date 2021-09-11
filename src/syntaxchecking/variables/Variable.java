@@ -1,11 +1,14 @@
 package syntaxchecking.variables;
 
+import syntaxchecking.methods.exceptions.DeclarationException;
 import utilities.Pair;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import static syntaxchecking.VariablesTypes.TYPES_LIST;
+import static utilities.RegexExpressions.PARAMS_NAME_PATTERN;
 import static utilities.StringManipulations.splitToWords;
 
 public class Variable {
@@ -21,9 +24,9 @@ public class Variable {
         this.type = null;
         this.name = null;
     }
-    public Variable( String name,String type,boolean isFinal,boolean isInitialized) {
+    public Variable( String name,String type,boolean isFinal) {
         this.isFinal = isFinal;
-        this.isInitialized = isInitialized;
+        this.isInitialized = false;
         this.type = type;
         this.name = name;
     }
@@ -32,7 +35,11 @@ public class Variable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws VariableException {
+        Matcher matcher = PARAMS_NAME_PATTERN.matcher(name);
+        if (!matcher.matches()) {
+            throw new VariableException();
+        }
         this.name = name;
     }
 
@@ -40,7 +47,10 @@ public class Variable {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(String type) throws VariableException {
+        if (!TYPES_LIST.contains(type)) {
+            throw new VariableException();
+        }
         this.type = type;
     }
 
