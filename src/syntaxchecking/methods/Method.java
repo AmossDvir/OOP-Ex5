@@ -24,7 +24,6 @@ public class Method {
     public Method(List<String> methodLines) {
         this.methodLines = methodLines;
         this.variables = new HashMap<>();
-        int a = 0,b;
     }
 
     /**
@@ -53,5 +52,27 @@ public class Method {
         lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
         if(lineMatcher.matches()){
         }
+    }
+
+    /**
+     * @param methodLine
+     * @return
+     */
+    public static String extractMethodName(String methodLine) {
+        return methodLine.substring(methodLine.indexOf(' ') + 1, methodLine.indexOf("("));
+    }
+
+    //    private void
+    public static void main(String[] args) throws MethodException {
+        List<String> aa = new ArrayList<>();
+        aa.add("void foo(int a, final String bibi){");
+        aa.add("final     (  rthsryhy   )   ;    ");
+
+        Method m = new Method(aa);
+        m.analyze();
+//        for (String i : m.variables.keySet()){
+//            System.out.println(i);
+//            System.out.println(m.variables.get(i).getFirst() + m.variables.get(i).getSecond());
+//        }
     }
 }

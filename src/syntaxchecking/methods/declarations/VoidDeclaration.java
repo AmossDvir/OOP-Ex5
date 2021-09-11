@@ -6,9 +6,11 @@ import utilities.MethodsPair;
 import utilities.Pair;
 import utilities.VariablesPair;
 
+
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static syntaxchecking.methods.Method.extractMethodName;
 import static syntaxchecking.ReservedWords.*;
 import static utilities.RegexExpressions.*;
 import static utilities.StringManipulations.*;
@@ -38,7 +40,6 @@ public class VoidDeclaration {
         String params = extractFromParantheses(line);
         List<String> paramsList = Arrays.stream(params.split(SPLIT_PARAMS)).toList();
 
-
         if (paramsList.size() != countOccurrences(params, COMMA) + 1) {
             throw new DeclarationException();
         }
@@ -60,9 +61,8 @@ public class VoidDeclaration {
     }
 
 
-    public static VariablesPair analyzeParameter(String paramLine) throws DeclarationException {
-        String params = fixBlankSpots(paramLine);
-        List<String> paramsList = Arrays.stream(params.split(WHITE_SPACE)).toList();
+    public static VariablesPair analyzeParameter(String paramLine) throws DeclartionException {
+        List<String> paramsList = splitToWords(paramLine);
         boolean finalFlag = false;
         int place = 0;
         if (paramsList.get(0).equals(FINAL)) {

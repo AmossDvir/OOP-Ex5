@@ -1,5 +1,7 @@
 package utilities;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static utilities.RegexExpressions.*;
@@ -51,9 +53,22 @@ public class StringManipulations {
      */
     public static String fixBlankSpots(String str) {
         str = str.trim();
-        str = str.replaceAll("\s{2,}", WHITE_SPACE);
+        str = str.replaceAll("\\s{2,}", WHITE_SPACE);
         return str;
     }
+
+    /**
+     *
+     * @param str
+     * @return list of the words in the line
+     */
+
+    public  static  List<String>  splitToWords(String str){
+        String params = fixBlankSpots(str);
+        return  Arrays.stream(params.split("\\s")).toList();
+    }
+
+
 
 
 }
