@@ -65,10 +65,6 @@ public class StringManipulations {
 
     public  static  List<String>  splitToWords(String str){
         String params = fixBlankSpots(str);
-        return  Arrays.stream(params.split("\\s")).toList();
+        return  Arrays.stream(params.split(WHITE_SPACE)).toList();
     }
-
-
-
-
 }

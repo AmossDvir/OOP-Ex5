@@ -2,29 +2,30 @@ package utilities;
 
 import java.util.regex.Pattern;
 
-
+/**
+ * Stores regular expressions.
+ */
 public class RegexExpressions {
+
 
     private static final String VOID_METHODS_DECLARATION = "\\s*void\\s*[a-zA-Z]+\\w*\\s*\\(.*\\)\\s*\\{";
     private static final String EXTRACTION = "\\((.*)\\)";
     private static final String PARAMS_NAME = "([a-zA-Z]\\w*)|(_\\w+)";
     public static final String SPLIT_PARAMS = ",+\\s*,*";
     public static final String SPLIT_SUB_CONDITIONS = "(\\|\\||&&)+\\s*(\\|\\||&&)*";
-
+    // Types detecting:
     private static final String INT_TYPE = "\\s*-?\\d+\\s*";
     private static final String DOUBLE_TYPE = "\\s*-?\\d+(.\\d+)?\\s*";
     private static final String STRING_TYPE = "\".*\"";
     private static final String CHAR_TYPE = "'.'";
     private static final String BOOLEAN_TYPE = "(true|false|" + INT_TYPE + "|"+DOUBLE_TYPE +")";
 
-
-
-
-
     public static final char COMMA = ',';
     public static final String OR_OPERATOR = "\\|\\|";
     public static final String AND_OPERATOR = "&&";
-    public static final String WHITE_SPACE = " ";
+    public static final String WHITE_SPACE = "\\s";
+    public static final char WHITE_SPACE_CHAR = ' ';
+
 
     // Compile them:
     public static final Pattern VOID_METHOD_DEC_PATTERN = Pattern.compile(VOID_METHODS_DECLARATION);
