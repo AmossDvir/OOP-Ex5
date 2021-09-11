@@ -1,13 +1,13 @@
 package syntaxchecking.methods.exceptions;
 
-public class DeclartionException extends Exception {
+public class DeclartionException extends MethodException {
     private static final long SerialVersionUID = 1L;
     private static final String DEFAULT_MESSAGE = "Invalid Method Declaration Line.";
 
     /**
      * a Default constructor, construct a new Exception with a default message.
      */
-    public DeclartionException() {
+    public DeclartionException(){
         super(DEFAULT_MESSAGE);
     }
 

@@ -17,5 +17,4 @@ public abstract class Pair<T,S> {
     public S getSecond(){
         return this.second;
     }
-
 }
