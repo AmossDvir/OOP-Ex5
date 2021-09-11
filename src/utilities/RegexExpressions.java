@@ -23,7 +23,7 @@ public class RegexExpressions {
     public static final char COMMA = ',';
     public static final String OR_OPERATOR = "\\|\\|";
     public static final String AND_OPERATOR = "&&";
-    public static final String WHITE_SPACE = "\s";
+    public static final String WHITE_SPACE = "\\s";
     public static final char WHITE_SPACE_CHAR = ' ';
 
 

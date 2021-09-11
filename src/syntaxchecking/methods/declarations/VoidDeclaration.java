@@ -61,7 +61,7 @@ public class VoidDeclaration {
     }
 
 
-    public static VariablesPair analyzeParameter(String paramLine) throws DeclartionException {
+    public static VariablesPair analyzeParameter(String paramLine) throws DeclarationException {
         List<String> paramsList = splitToWords(paramLine);
         boolean finalFlag = false;
         int place = 0;
