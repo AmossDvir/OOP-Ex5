@@ -10,15 +10,13 @@ import utilities.VariablesPair;
 import java.util.*;
 import java.util.regex.Matcher;
 
-import static syntaxchecking.methods.declarations.Expressions.*;
+import static syntaxchecking.methods.Expressions.*;
 
 
 /**
  * a class that analyzes void methods' patterns.
  */
 public class VoidDeclaration {
-    public static final char WHITE_SPACE = ' ';
-    public static final char COMMA = ',';
 
 
     public static MethodsPair analyzeDeclaration(String line, Map<String, Pair<String, Boolean>> paramsMap)
@@ -30,10 +28,11 @@ public class VoidDeclaration {
             throw new DeclartionException();
         }
         // take out the parameters:
-        Matcher matcherParams = PARAMS_EXTRACTION_PATTERN.matcher(line);
-        matcherParams.find();
-        String params = matcherParams.group(1);
-        List<String> paramsList = Arrays.stream(params.split((",+ *,*"))).toList();
+        Matcher paramsMatcher = PARAMS_EXTRACTION_PATTERN.matcher(line);
+        paramsMatcher.find();
+        String params = paramsMatcher.group(1);
+        List<String> paramsList = Arrays.stream(params.split(SPLIT_PARAMS)).toList();
+
 
         if (paramsList.size() != countOccurrences(params, COMMA) + 1) {
             throw new DeclartionException();
@@ -80,7 +79,7 @@ public class VoidDeclaration {
      */
     private static String fixBlankSpots(String str) {
         str = str.trim();
-        str = str.replaceAll("\s{2,}", " ");
+        str = str.replaceAll("\s{2,}", WHITE_SPACE);
         return str;
     }
 
@@ -109,19 +108,5 @@ public class VoidDeclaration {
         }
 
         return new VariablesPair(paramsList.get(place + 1), paramsList.get(place), finalFlag);
-//        return new VariablesPair(paramsList.get(place+1), new TypeFinalPair(paramsList.get(place), finalFlag));
-    }
-
-    public static void main(String[] args) {
-        Map<String, Pair<String, Boolean>> paramsMap = new HashMap<>();
-        try {
-            MethodsPair p = analyzeDeclaration("void foo(int a, final boolean b,String s){", paramsMap);
-            p.printMethodsPair();
-
-
-        }
-        catch(DeclartionException e){
-            System.out.println("Error!");
-        }
     }
 }
