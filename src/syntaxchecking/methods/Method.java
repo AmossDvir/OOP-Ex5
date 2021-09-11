@@ -1,5 +1,7 @@
 package syntaxchecking.methods;
 
+import syntaxchecking.conditions.Condition;
+import syntaxchecking.conditions.exceptions.ConditionLogicException;
 import syntaxchecking.methods.declarations.VoidDeclaration;
 import syntaxchecking.methods.exceptions.MethodException;
 import utilities.MethodsPair;
@@ -11,16 +13,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import static syntaxchecking.methods.Expressions.*;
+import static utilities.RegexExpressions.*;
 
 
 public class Method {
     private List<String> methodLines;
-    private Map<String, Pair<String, Boolean>> varaibles;
+    private Map<String, Pair<String, Boolean>> variables;
 
     public Method(List<String> methodLines) {
         this.methodLines = methodLines;
-        this.varaibles = new HashMap<>();
+        this.variables = new HashMap<>();
     }
 
     /**
@@ -29,7 +31,7 @@ public class Method {
      * @throws MethodException
      */
     public MethodsPair analyze() throws MethodException {
-        MethodsPair m = VoidDeclaration.analyzeDeclaration(methodLines.get(0), varaibles);
+        MethodsPair m = VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
         classifyLine(methodLines.get(1));
         return m;
     }
@@ -37,30 +39,25 @@ public class Method {
     /**
      * Classifies a given line and invokes the corresponding method.
      */
-    private void classifyLine(String line){
+    private void classifyLine(String line) throws MethodException {
         Matcher lineMatcher = IF_WHILE_BLOCK_PATTERN.matcher(line);
         if(lineMatcher.matches()){
-            System.out.println("If or While block!!");
+            Condition condition = new Condition(line,variables);
+            condition.checkCondition();
         }
         lineMatcher = METHOD_CALLING_BLOCK_PATTERN.matcher(line);
         if(lineMatcher.matches()){
-                System.out.println("Method!");
             }
         lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
         if(lineMatcher.matches()){
-            System.out.println("Return!");
         }
-    }
-
-    private void checkCondition(String condition){
-
     }
 
     //    private void
     public static void main(String[] args) throws MethodException {
         List<String> aa = new ArrayList<>();
         aa.add("void foo(int a, final String bibi){");
-        aa.add("foo     (  rthsryhy   )   ;    ");
+        aa.add("final     (  rthsryhy   )   ;    ");
 
         Method m = new Method(aa);
         m.analyze();

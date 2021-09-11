@@ -10,7 +10,8 @@ import utilities.VariablesPair;
 import java.util.*;
 import java.util.regex.Matcher;
 
-import static syntaxchecking.methods.Expressions.*;
+import static utilities.RegexExpressions.*;
+import static utilities.StringManipulations.*;
 
 
 /**
@@ -28,9 +29,7 @@ public class VoidDeclaration {
             throw new DeclartionException();
         }
         // take out the parameters:
-        Matcher paramsMatcher = PARAMS_EXTRACTION_PATTERN.matcher(line);
-        paramsMatcher.find();
-        String params = paramsMatcher.group(1);
+        String params = extractFromParantheses(line);
         List<String> paramsList = Arrays.stream(params.split(SPLIT_PARAMS)).toList();
 
 
@@ -43,44 +42,15 @@ public class VoidDeclaration {
             paramsMap.put(temp.getName(), temp);
             typesList.add(temp.getFirst());
         }
-        return new MethodsPair(extractMethodName(line),typesList);
+        return new MethodsPair(extractMethodName(line), typesList);
     }
 
     /**
-     *
      * @param methodLine
      * @return
      */
-    public static String extractMethodName(String methodLine){
-        return methodLine.substring(methodLine.indexOf(' ')+1,methodLine.indexOf("("));
-    }
-    /**
-     * Counts the number of occurrences of a char appears in a String.
-     *
-     * @param line: a given String.
-     * @return the number of occurrences of the char in the String.
-     */
-    private static int countOccurrences(String line, char someChar) {
-        int count = 0;
-        for (int i = 0; i < line.length(); i++) {
-            if (line.charAt(i) == someChar) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-
-    /**
-     * Takes out all white-spaces that are more than one.
-     *
-     * @param str: a given String
-     * @return a corrected string with only 1 white-space in between words.
-     */
-    private static String fixBlankSpots(String str) {
-        str = str.trim();
-        str = str.replaceAll("\s{2,}", WHITE_SPACE);
-        return str;
+    public static String extractMethodName(String methodLine) {
+        return methodLine.substring(methodLine.indexOf(' ') + 1, methodLine.indexOf("("));
     }
 
 
