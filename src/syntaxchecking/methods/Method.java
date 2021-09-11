@@ -53,6 +53,14 @@ public class Method {
         }
     }
 
+    /**
+     * @param methodLine
+     * @return
+     */
+    public static String extractMethodName(String methodLine) {
+        return methodLine.substring(methodLine.indexOf(' ') + 1, methodLine.indexOf("("));
+    }
+
     //    private void
     public static void main(String[] args) throws MethodException {
         List<String> aa = new ArrayList<>();

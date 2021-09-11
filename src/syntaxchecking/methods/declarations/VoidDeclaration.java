@@ -10,6 +10,7 @@ import utilities.VariablesPair;
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static syntaxchecking.methods.Method.extractMethodName;
 import static utilities.RegexExpressions.*;
 import static utilities.StringManipulations.*;
 
@@ -32,7 +33,6 @@ public class VoidDeclaration {
         String params = extractFromParantheses(line);
         List<String> paramsList = Arrays.stream(params.split(SPLIT_PARAMS)).toList();
 
-
         if (paramsList.size() != countOccurrences(params, COMMA) + 1) {
             throw new DeclartionException();
         }
@@ -45,18 +45,9 @@ public class VoidDeclaration {
         return new MethodsPair(extractMethodName(line), typesList);
     }
 
-    /**
-     * @param methodLine
-     * @return
-     */
-    public static String extractMethodName(String methodLine) {
-        return methodLine.substring(methodLine.indexOf(' ') + 1, methodLine.indexOf("("));
-    }
-
 
     public static VariablesPair analyzeParameter(String paramLine) throws DeclartionException {
-        String params = fixBlankSpots(paramLine);
-        List<String> paramsList = Arrays.stream(params.split("\s")).toList();
+        List<String> paramsList = splitToWords(paramLine);
         boolean finalFlag = false;
         int place = 0;
         if (paramsList.get(0).equals("final")) {
