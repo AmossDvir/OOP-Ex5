@@ -30,6 +30,12 @@ public class Variable {
         this.type = type;
         this.name = name;
     }
+    public Variable( String name,String type,boolean isFinal,boolean isInitialized) {
+        this.isFinal = isFinal;
+        this.isInitialized = isInitialized;
+        this.type = type;
+        this.name = name;
+    }
 
     public String getName() {
         return name;

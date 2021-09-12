@@ -19,7 +19,7 @@ import static utilities.RegexExpressions.*;
  */
 public class Method {
     private List<String> methodLines;
-    private Map<String, Pair<String, Variable>> variables;
+    private Map<String, Variable> variables;
 
     public Method(List<String> methodLines) {
         this.methodLines = methodLines;

@@ -29,7 +29,7 @@ public class Condition {
 
     // Members:
     private String condition;
-    private Map<String, Pair<String, Variable>> variables;
+    private Map<String, Variable> variables;
 
     /**
      * Constructs a condition and stores a list of an already-known variables.
@@ -37,7 +37,7 @@ public class Condition {
      * @param condition: a String represents a condition.
      * @param variables: list of variables known to some method.
      */
-    public Condition(String condition, Map<String, Pair<String, Variable>> variables) {
+    public Condition(String condition, Map<String, Variable> variables) {
         // Take out only the condition inside the parentheses.
         this.condition = extractFromParantheses(condition);
         this.variables = variables;
@@ -78,7 +78,7 @@ public class Condition {
         }
         // Check if subCondition is one of the method's variables:
         if (variables.containsKey(subCondition)) {
-            if (LEGAL_TYPES.contains(variables.get(subCondition).getFirst())) {
+            if (LEGAL_TYPES.contains(variables.get(subCondition).getType())) {
                 return;
             }
         }

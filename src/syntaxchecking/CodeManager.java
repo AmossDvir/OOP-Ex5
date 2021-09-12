@@ -2,6 +2,7 @@ package syntaxchecking;
 
 import syntaxchecking.blocks.exceptions.BlockException;
 import syntaxchecking.methods.declarations.VoidDeclaration;
+import syntaxchecking.methods.exceptions.DeclarationException;
 import syntaxchecking.variables.Variable;
 import syntaxchecking.variables.VariableException;
 import utilities.MethodsPair;
@@ -29,7 +30,7 @@ public class CodeManager {
         this.methodsLines = new HashMap<>();
     }
 
-    public void registerMethods() throws BlockException {
+    public void registerMethods() throws BlockException, DeclarationException {
         Matcher genericMatcher;
         int lineIndex = 0;
         // Iterate through all the code lines:
@@ -37,7 +38,8 @@ public class CodeManager {
             genericMatcher = VOID_METHOD_DEC_PATTERN.matcher(line);
             // Try to verify the general struct of a method declaration:
             if (genericMatcher.matches()) {
-                MethodsPair mp = VoidDeclaration.analyzeDeclaration();
+                Map<String, Variable> paramsMap = new HashMap<>();
+                MethodsPair mp = VoidDeclaration.analyzeDeclaration(line,paramsMap);
 //                if (!methodsDeclarations.containsKey(mp.getFirst())) {
                     methodsLines.put(mp.getFirst(),divideIntoMethods(lineIndex));
 //                    methodsLines.put(mp.getFirst(),new Pair(lineIndex,8) )

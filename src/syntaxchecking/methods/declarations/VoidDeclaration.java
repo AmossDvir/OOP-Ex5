@@ -29,7 +29,7 @@ public class VoidDeclaration {
      * @return :
      * @throws DeclarationException:
      */
-    public static MethodsPair analyzeDeclaration(String line, Map<String, Pair<String, Variable>> paramsMap)
+    public static MethodsPair analyzeDeclaration(String line, Map<String, Variable> paramsMap)
             throws DeclarationException {
 
         // take out the parameters:
@@ -41,16 +41,16 @@ public class VoidDeclaration {
         }
         List<String> typesList = new ArrayList<>();
         for (String param : paramsList) {
-            VariablesPair temp = analyzeParameter(param);
-//            paramsMap.put(temp.getName(), temp);
-            typesList.add(temp.getFirst());
+           Variable temp = analyzeParameter(param);
+           paramsMap.put(temp.getName(), temp);
+            typesList.add(temp.getType());
         }
         return new MethodsPair(extractMethodName(line), typesList);
     }
 
 
 
-    public static VariablesPair analyzeParameter(String paramLine) throws DeclarationException {
+    public static Variable analyzeParameter(String paramLine) throws DeclarationException {
         List<String> paramsList = splitToWords(paramLine);
         boolean finalFlag = false;
         int place = 0;
@@ -72,6 +72,6 @@ public class VoidDeclaration {
             throw new DeclarationException();
         }
 
-        return new VariablesPair(paramsList.get(place + 1), paramsList.get(place), finalFlag);
+        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag,true);
     }
 }
