@@ -34,23 +34,28 @@ public class VoidDeclaration {
 
         // take out the parameters:
         String params = extractFromParantheses(line);
-        List<String> paramsList = Arrays.asList(params.split(SPLIT_PARAMS));
+        if (params.equals("")) {
+            return new MethodsPair(extractMethodName(line), new ArrayList<String>());
 
-        if (paramsList.size() != countOccurrences(params, COMMA) + 1) {
-            throw new DeclarationException();
+        } else {
+            List<String> paramsList = Arrays.asList(params.split(SPLIT_PARAMS));
+
+            if (paramsList.size() != countOccurrences(params, COMMA) + 1) {
+                throw new DeclarationException();
+            }
+            List<String> typesList = new ArrayList<>();
+            for (String param : paramsList) {
+                Variable temp = analyzeParameter(param);
+                paramsMap.put(temp.getName(), temp);
+                typesList.add(temp.getType());
+            }
+            return new MethodsPair(extractMethodName(line), typesList);
         }
-        List<String> typesList = new ArrayList<>();
-        for (String param : paramsList) {
-           Variable temp = analyzeParameter(param);
-           paramsMap.put(temp.getName(), temp);
-            typesList.add(temp.getType());
-        }
-        return new MethodsPair(extractMethodName(line), typesList);
     }
 
 
-
     public static Variable analyzeParameter(String paramLine) throws DeclarationException {
+//        if(paramLine.equals(""))
         List<String> paramsList = splitToWords(paramLine);
         boolean finalFlag = false;
         int place = 0;
@@ -72,6 +77,6 @@ public class VoidDeclaration {
             throw new DeclarationException();
         }
 
-        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag,true);
+        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag, true);
     }
 }

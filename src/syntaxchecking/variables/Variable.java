@@ -24,13 +24,13 @@ public class Variable {
         this.type = null;
         this.name = null;
     }
-    public Variable( String name,String type,boolean isFinal) {
+    public Variable(String name,String type,boolean isFinal) {
         this.isFinal = isFinal;
         this.isInitialized = false;
         this.type = type;
         this.name = name;
     }
-    public Variable( String name,String type,boolean isFinal,boolean isInitialized) {
+    public Variable(String name,String type,boolean isFinal,boolean isInitialized) {
         this.isFinal = isFinal;
         this.isInitialized = isInitialized;
         this.type = type;

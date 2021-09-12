@@ -40,7 +40,7 @@ public class VariablesManager {
             Variable var = new Variable(word,type,isFinal);
             if (i < words.size() - 2) {
                 if (words.get(i + 1).equals(EQUALS_SIGN)) {
-                    assignmentCheck(word, words.get(i + 2), type);
+                    valueCheck(words.get(i + 2), type);
                     var.setInitialized(true);
                     i += 3;
                 } else {
@@ -69,6 +69,14 @@ public class VariablesManager {
         return TYPES_LIST.contains(type);
     }
 
+    /**
+     * Returns a HashMap of variables.
+     * @return : HashMap of variables.
+     */
+    public Map<String, Variable> getVariables() {
+        return registry;
+    }
+
     public void prefixCheck(List<String> words) throws VariableException {
         String firstWord = words.get(0);
         String secondWord = words.get(1);
@@ -85,27 +93,27 @@ public class VariablesManager {
                 throw new VariableException();
             }
             type = registry.get(firstWord).getType();
-            assignmentCheck(firstWord, words.get(2), type);
+            valueCheck(words.get(2), type);
         }
     }
 
     /**
-     * @param word1 Name of variable to assign
-     * @param word2 Value to assign
+     * @param word Name of variable to assign
+     * @param word Value to assign
      * @throws VariableException
      */
-    private void assignmentCheck(String word1, String word2, String type) throws VariableException {
+    private void valueCheck(String word, String type) throws VariableException {
 
         //Check if the value is another variable we declared before
-        if (registry.containsKey(word2)) {
-            if (!registry.get(word2).getType().equals(type)) {
+        if (registry.containsKey(word)) {
+            if (!registry.get(word).getType().equals(type)) {
                 throw new VariableException();
             }
-            if (!registry.get(word2).isInitialized()) {
+            if (!registry.get(word).isInitialized()) {
                 throw new VariableException();
             }
         } else {
-            if (!isInstanceOf(type, word2)) {
+            if (!isInstanceOf(type, word)) {
                 throw new VariableException();
             }
         }

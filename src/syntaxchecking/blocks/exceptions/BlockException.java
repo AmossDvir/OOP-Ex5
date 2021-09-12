@@ -7,6 +7,7 @@ import syntaxchecking.methods.exceptions.MethodException;
  */
 public class BlockException extends MethodException {
     // Constants:
+    private static final long SerialVersionUID = 1L;
     private static final String DEFAULT_MESSAGE = "Invalid Block of Code";
 
     // Constructors:
