@@ -2,6 +2,7 @@ package syntaxchecking.methods.declarations;
 
 import syntaxchecking.VariablesTypes;
 import syntaxchecking.methods.exceptions.DeclarationException;
+import syntaxchecking.variables.Variable;
 import utilities.MethodsPair;
 import utilities.Pair;
 import utilities.VariablesPair;
@@ -10,8 +11,8 @@ import utilities.VariablesPair;
 import java.util.*;
 import java.util.regex.Matcher;
 
-import static syntaxchecking.methods.Method.extractMethodName;
 import static syntaxchecking.ReservedWords.*;
+import static syntaxchecking.methods.Method.extractMethodName;
 import static utilities.RegexExpressions.*;
 import static utilities.StringManipulations.*;
 
@@ -28,14 +29,9 @@ public class VoidDeclaration {
      * @return :
      * @throws DeclarationException:
      */
-    public static MethodsPair analyzeDeclaration(String line, Map<String, Pair<String, Boolean>> paramsMap)
+    public static MethodsPair analyzeDeclaration(String line, Map<String, Pair<String, Variable>> paramsMap)
             throws DeclarationException {
-        // Try to verify the general struct of a method:
-        Matcher genericMatcher = VOID_METHOD_DEC_PATTERN.matcher(line);
 
-        if (!genericMatcher.matches()) {
-            throw new DeclarationException();
-        }
         // take out the parameters:
         String params = extractFromParantheses(line);
         List<String> paramsList = Arrays.asList(params.split(SPLIT_PARAMS));
@@ -46,19 +42,12 @@ public class VoidDeclaration {
         List<String> typesList = new ArrayList<>();
         for (String param : paramsList) {
             VariablesPair temp = analyzeParameter(param);
-            paramsMap.put(temp.getName(), temp);
+//            paramsMap.put(temp.getName(), temp);
             typesList.add(temp.getFirst());
         }
         return new MethodsPair(extractMethodName(line), typesList);
     }
 
-    /**
-     * @param methodLine
-     * @return
-     */
-    public static String extractMethodName(String methodLine) {
-        return methodLine.substring(methodLine.indexOf(WHITE_SPACE_CHAR) + 1, methodLine.indexOf("("));
-    }
 
 
     public static VariablesPair analyzeParameter(String paramLine) throws DeclarationException {

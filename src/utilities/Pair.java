@@ -1,11 +1,11 @@
 package utilities;
 
 /**
- * a generic abstract class, represents a generic pair.
+ * a generic class, represents a generic pair.
  * @param <T>: Type of the first element.
  * @param <S>: Type of the first element.
  */
-public abstract class Pair<T,S> {
+public class Pair<T,S> {
 
     // Members:
     protected T first;

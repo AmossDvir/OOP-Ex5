@@ -1,10 +1,8 @@
 package syntaxchecking.variables;
 
-
-
 public class VariableException extends Exception {
     private static final long SerialVersionUID = 1L;
-    private static final String DEFAULT_MESSAGE = "Invalid variable.";
+    private static final String DEFAULT_MESSAGE = "Invalid Variable";
 
     /**
      * a Default constructor, construct a new Exception with a default message.

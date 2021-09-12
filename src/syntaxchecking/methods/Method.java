@@ -3,6 +3,7 @@ package syntaxchecking.methods;
 import syntaxchecking.conditions.Condition;
 import syntaxchecking.methods.declarations.VoidDeclaration;
 import syntaxchecking.methods.exceptions.MethodException;
+import syntaxchecking.variables.Variable;
 import utilities.MethodsPair;
 import utilities.Pair;
 
@@ -13,13 +14,12 @@ import java.util.regex.Matcher;
 
 import static utilities.RegexExpressions.*;
 
-
 /**
  *
  */
 public class Method {
     private List<String> methodLines;
-    private Map<String, Pair<String, Boolean>> variables;
+    private Map<String, Pair<String, Variable>> variables;
 
     public Method(List<String> methodLines) {
         this.methodLines = methodLines;
@@ -33,6 +33,7 @@ public class Method {
      */
     public MethodsPair analyze() throws MethodException {
         MethodsPair m = VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
+        // TODO: CONTINUE
         classifyLine(methodLines.get(1));
         return m;
     }
@@ -45,6 +46,7 @@ public class Method {
         if(lineMatcher.matches()){
             Condition condition = new Condition(line,variables);
             condition.checkCondition();
+
         }
         lineMatcher = METHOD_CALLING_BLOCK_PATTERN.matcher(line);
         if(lineMatcher.matches()){

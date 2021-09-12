@@ -8,25 +8,29 @@ import static syntaxchecking.variables.TypeIdentifier.isInstanceOf;
 import static utilities.StringManipulations.splitToWords;
 
 public class VariablesManager {
-    private static final String EQUAL = "=";
+    // Members:
+    private static final String EQUALS_SIGN = "=";
     private static final String SEMICOLON = ";";
+    // Here we store all the variables:
     private Map<String, Variable> registry;
 
-    public VariablesManager(String variableLine) {
+    // Constructors:
 
+    /**
+     *
+     */
+    public VariablesManager() {
         this.registry = new HashMap<>();
     }
 
     public void analyzeVariableLine(String line) throws VariableException {
-        line = line.replaceAll("=", " = ");
+        line = line.replaceAll("\\s*=\\s*", "\\s=\\s");
         List<String> words = splitToWords(line.replaceAll(",", " "));
         prefixCheck(words);
-
-
     }
 
     private boolean isAssignment(String line) {
-        return line.contains(EQUAL);
+        return line.contains(EQUALS_SIGN);
     }
 
     public void analyze(List<String> words, String type, boolean isFinal) throws VariableException {
@@ -35,21 +39,19 @@ public class VariablesManager {
             String word = words.get(i);
             Variable var = new Variable(word,type,isFinal);
             if (i < words.size() - 2) {
-                if (words.get(i + 1).equals(EQUAL)) {
+                if (words.get(i + 1).equals(EQUALS_SIGN)) {
                     assignmentCheck(word, words.get(i + 2), type);
                     var.setInitialized(true);
                     i += 3;
                 } else {
                     i++;
                 }
-
             } else {
                 i++;
             }
             varFinalCheck(var);
             registry.put(word, var);
         }
-
     }
     public void varFinalCheck(Variable var) throws VariableException {
         if (var.isFinal() && !var.isInitialized()) {
@@ -65,7 +67,6 @@ public class VariablesManager {
 
     private boolean ifvalidType(String type) {
         return TYPES_LIST.contains(type);
-
     }
 
     public void prefixCheck(List<String> words) throws VariableException {
@@ -79,7 +80,6 @@ public class VariablesManager {
         } else if (ifvalidType(firstWord)) {
             type = firstWord;
             analyze(words.subList(1, words.size()), type, false);
-
         } else {
             if (!registry.containsKey(firstWord)) {
                 throw new VariableException();
@@ -87,7 +87,6 @@ public class VariablesManager {
             type = registry.get(firstWord).getType();
             assignmentCheck(firstWord, words.get(2), type);
         }
-
     }
 
     /**
@@ -110,13 +109,12 @@ public class VariablesManager {
                 throw new VariableException();
             }
         }
-
-
     }
 
     public static void main(String[] args) throws VariableException {
-        VariablesManager v = new VariablesManager("int i1 , i2 =6 ");
-        List<String> lst = Arrays.asList("a", "b", "c", "d", "=", "true", "e", "f", "=", "5");
+        VariablesManager v = new VariablesManager();
+        v.analyzeVariableLine("final int a,b=5,c");
+        List<String> lst = Arrays.asList("a", "b", "c,,", "d", "=", "true", "e", "f", "=", "5");
         v.analyze(lst, "boolean", false);
         for (String key : v.registry.keySet()) {
             System.out.println(key);
@@ -125,6 +123,4 @@ public class VariablesManager {
             System.out.println(v.registry.get(key).isInitialized());
         }
     }
-
-
 }

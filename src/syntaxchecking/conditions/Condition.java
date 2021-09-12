@@ -5,6 +5,7 @@ import syntaxchecking.conditions.exceptions.ConditionLogicException;
 import static syntaxchecking.VariablesTypes.*;
 import static syntaxchecking.variables.TypeIdentifier.*;
 
+import syntaxchecking.variables.Variable;
 import utilities.Pair;
 
 import java.util.*;
@@ -28,7 +29,7 @@ public class Condition {
 
     // Members:
     private String condition;
-    private Map<String, Pair<String, Boolean>> variables;
+    private Map<String, Pair<String, Variable>> variables;
 
     /**
      * Constructs a condition and stores a list of an already-known variables.
@@ -36,7 +37,7 @@ public class Condition {
      * @param condition: a String represents a condition.
      * @param variables: list of variables known to some method.
      */
-    public Condition(String condition, Map<String, Pair<String, Boolean>> variables) {
+    public Condition(String condition, Map<String, Pair<String, Variable>> variables) {
         // Take out only the condition inside the parentheses.
         this.condition = extractFromParantheses(condition);
         this.variables = variables;
