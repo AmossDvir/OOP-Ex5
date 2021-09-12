@@ -20,10 +20,12 @@ import static utilities.RegexExpressions.*;
 public class Method {
     private List<String> methodLines;
     private Map<String, Variable> variables;
+    private Map<String,List<String>> methodsList;
 
-    public Method(List<String> methodLines) {
+    public Method(List<String> methodLines,Map<String,List<String>> methodsList) {
         this.methodLines = methodLines;
         this.variables = new HashMap<>();
+        this.methodsList = methodsList ;
     }
 
     /**
@@ -31,11 +33,13 @@ public class Method {
      * @return
      * @throws MethodException
      */
-    public MethodsPair analyze() throws MethodException {
+    public void analyze() throws MethodException {
         MethodsPair m = VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
         // TODO: CONTINUE
-        classifyLine(methodLines.get(1));
-        return m;
+        for (String line:methodLines){
+            classifyLine(line);
+        }
+
     }
 
     /**

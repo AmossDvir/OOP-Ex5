@@ -84,10 +84,10 @@ public class CodeManager {
             // Check if a global variable declaration line:
             if (isGlobalVar(lines.get(lineIndex))) {
                 // Create new Variable:
-                VariablesManager vm = new VariablesManager();
+                VariablesManager vm = new VariablesManager(globalVars);
                 vm.analyzeVariableLine(lines.get(lineIndex));
                 // Merge the returning variables Map with the existing one:
-                this.globalVars.putAll(vm.getVariables());
+
             }
         }
     }
@@ -116,7 +116,7 @@ public class CodeManager {
     private void checkMethods() throws MethodException {
         Method m;
         for (Pair<Integer, Integer> p : this.methodsLines.values()) {
-            m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1));
+            m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1),methodsDeclarations);
             m.analyze();
         }
     }

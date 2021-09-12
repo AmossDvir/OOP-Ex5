@@ -19,8 +19,8 @@ public class VariablesManager {
     /**
      *
      */
-    public VariablesManager() {
-        this.registry = new HashMap<>();
+    public VariablesManager(Map<String, Variable> variableMap) {
+        this.registry = variableMap;
     }
 
     public void analyzeVariableLine(String line) throws VariableException {
@@ -36,8 +36,8 @@ public class VariablesManager {
     public void analyze(List<String> words, String type, boolean isFinal) throws VariableException {
         int i = 0;
         while (i < words.size()) {
-            String word = words.get(i);
-            Variable var = new Variable(word,type,isFinal);
+            String varName = words.get(i);
+            Variable var = new Variable(varName,type,isFinal);
             if (i < words.size() - 2) {
                 if (words.get(i + 1).equals(EQUALS_SIGN)) {
                     valueCheck(words.get(i + 2), type);
@@ -50,7 +50,7 @@ public class VariablesManager {
                 i++;
             }
             varFinalCheck(var);
-            registry.put(word, var);
+            registry.put(varName, var);
         }
     }
     public void varFinalCheck(Variable var) throws VariableException {
@@ -120,15 +120,14 @@ public class VariablesManager {
     }
 
     public static void main(String[] args) throws VariableException {
-        VariablesManager v = new VariablesManager();
-        v.analyzeVariableLine("final int a,b=5,c");
-        List<String> lst = Arrays.asList("a", "b", "c,,", "d", "=", "true", "e", "f", "=", "5");
-        v.analyze(lst, "boolean", false);
-        for (String key : v.registry.keySet()) {
-            System.out.println(key);
-            System.out.println(v.registry.get(key).getType());
-            System.out.println(v.registry.get(key).isFinal());
-            System.out.println(v.registry.get(key).isInitialized());
-        }
+//        v.analyzeVariableLine("final int a,b=5,c");
+//        List<String> lst = Arrays.asList("a", "b", "c,,", "d", "=", "true", "e", "f", "=", "5");
+//        v.analyze(lst, "boolean", false);
+//        for (String key : v.registry.keySet()) {
+//            System.out.println(key);
+//            System.out.println(v.registry.get(key).getType());
+//            System.out.println(v.registry.get(key).isFinal());
+//            System.out.println(v.registry.get(key).isInitialized());
+//        }
     }
 }
