@@ -1,11 +1,9 @@
 package syntaxchecking.methods;
 
-import syntaxchecking.conditions.Condition;
 import syntaxchecking.methods.declarations.VoidDeclaration;
 import syntaxchecking.methods.exceptions.MethodException;
 import syntaxchecking.variables.Variable;
 import utilities.MethodsPair;
-import utilities.Pair;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,22 +38,7 @@ public class Method {
         }
     }
 
-    /**
-     * Classifies a given line and invokes the corresponding method.
-     */
-    private void classifyLine(String line) throws MethodException {
-        Matcher lineMatcher = IF_WHILE_BLOCK_PATTERN.matcher(line);
-        if (lineMatcher.matches()) {
-            Condition condition = new Condition(line, variables);
-            condition.checkCondition();
 
-        }
-        lineMatcher = METHOD_CALLING_BLOCK_PATTERN.matcher(line);
-        if (lineMatcher.matches()) {
-        }
-        lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
-        if (lineMatcher.matches()) {
-        }
     }
 
 

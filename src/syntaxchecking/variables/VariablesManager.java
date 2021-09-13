@@ -112,11 +112,13 @@ public class VariablesManager {
             if (!registry.get(word).isInitialized()) {
                 throw new VariableException();
             }
+
         } else {
             if (!isInstanceOf(type, word)) {
                 throw new VariableException();
             }
         }
+        registry.get(word).setInitialized(true);
     }
 
     public static void main(String[] args) throws VariableException {
