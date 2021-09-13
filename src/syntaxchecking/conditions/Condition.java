@@ -6,7 +6,6 @@ import static syntaxchecking.VariablesTypes.*;
 import static syntaxchecking.variables.TypeIdentifier.*;
 
 import syntaxchecking.variables.Variable;
-import utilities.Pair;
 
 import java.util.*;
 
@@ -20,7 +19,6 @@ public class Condition {
     // Constants:
     // Define a set of legal variables and initialize it:
     private static final Set<String> LEGAL_TYPES = new HashSet<>();
-
     static {
         LEGAL_TYPES.add(BOOLEAN);
         LEGAL_TYPES.add(DOUBLE);

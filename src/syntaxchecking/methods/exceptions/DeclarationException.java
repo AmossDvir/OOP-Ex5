@@ -7,6 +7,7 @@ public class DeclarationException extends MethodException {
     private static final long SerialVersionUID = 1L;
     private static final String DEFAULT_MESSAGE = "Invalid Method Declaration Line.";
 
+    // Constructors:
     /**
      * a Default constructor, construct a new Exception with a default message.
      */
