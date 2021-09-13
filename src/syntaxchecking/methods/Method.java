@@ -20,26 +20,24 @@ import static utilities.RegexExpressions.*;
 public class Method {
     private List<String> methodLines;
     private Map<String, Variable> variables;
-    private Map<String,List<String>> methodsList;
+    private Map<String, List<String>> methodsList;
 
-    public Method(List<String> methodLines,Map<String,List<String>> methodsList) {
+    public Method(List<String> methodLines, Map<String, List<String>> methodsList) {
         this.methodLines = methodLines;
         this.variables = new HashMap<>();
-        this.methodsList = methodsList ;
+        this.methodsList = methodsList;
     }
 
     /**
-     *
      * @return
      * @throws MethodException
      */
     public void analyze() throws MethodException {
         MethodsPair m = VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
         // TODO: CONTINUE
-        for (String line:methodLines){
+        for (String line : methodLines) {
             classifyLine(line);
         }
-
     }
 
     /**
@@ -47,17 +45,39 @@ public class Method {
      */
     private void classifyLine(String line) throws MethodException {
         Matcher lineMatcher = IF_WHILE_BLOCK_PATTERN.matcher(line);
-        if(lineMatcher.matches()){
-            Condition condition = new Condition(line,variables);
+        if (lineMatcher.matches()) {
+            Condition condition = new Condition(line, variables);
             condition.checkCondition();
 
         }
         lineMatcher = METHOD_CALLING_BLOCK_PATTERN.matcher(line);
-        if(lineMatcher.matches()){
-            }
-        lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
-        if(lineMatcher.matches()){
+        if (lineMatcher.matches()) {
         }
+        lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
+        if (lineMatcher.matches()) {
+        }
+    }
+
+
+    private void registerBlocks() {
+        Matcher closingBlockMatcher;
+        while()
+        if()
+        int lineIndex = 0;
+        Matcher ifWhileBlockMatcher;
+        Pair<Integer, Integer> blockLines;
+
+        for (; lineIndex < methodLines.size(); lineIndex++) {
+            // Check if a new block starts:
+            ifWhileBlockMatcher = IF_WHILE_BLOCK_PATTERN.matcher(methodLines.get(lineIndex));
+            if (ifWhileBlockMatcher.matches()) {
+                blockLines = divideIntoBlocks();
+            }
+
+        }
+    }
+
+    private Pair<Integer, Integer> divideIntoBlocks() {
     }
 
     /**

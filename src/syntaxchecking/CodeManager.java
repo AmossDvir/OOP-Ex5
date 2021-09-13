@@ -36,18 +36,17 @@ public class CodeManager {
 
     public void registerMethods() throws BlockException, DeclarationException {
         Matcher declarationMatcher, globalVarMatcher;
+        Pair<Integer, Integer> blockLines;
         int lineIndex = 0;
         // Iterate through all the code lines:
         for (; lineIndex < lines.size(); lineIndex++) {
             declarationMatcher = VOID_METHOD_DEC_PATTERN.matcher(lines.get(lineIndex));
-
-
             // Try to verify the general struct of a method declaration:
             if (declarationMatcher.matches()) {
                 Map<String, Variable> paramsMap = new HashMap<>();
                 MethodsPair mp = VoidDeclaration.analyzeDeclaration(lines.get(lineIndex), paramsMap);
                 checkMethodsDuplication(mp);
-                Pair<Integer, Integer> blockLines = divideIntoMethods(lineIndex);
+                blockLines = divideIntoMethods(lineIndex);
                 methodsLines.put(mp.getFirst(), blockLines);
                 lineIndex += blockLines.getSecond();
                 methodsDeclarations.put(mp.getFirst(), mp.getSecond());
@@ -81,42 +80,39 @@ public class CodeManager {
                     lineIndex += p.getSecond() + 1;
                 }
             }
-            // Check if a global variable declaration line:
-            if (isGlobalVar(lines.get(lineIndex))) {
-                // Create new Variable:
-                VariablesManager vm = new VariablesManager(globalVars);
-                vm.analyzeVariableLine(lines.get(lineIndex));
-                // Merge the returning variables Map with the existing one:
+            // Global variable declaration line:
+            VariablesManager vm = new VariablesManager(globalVars);
+            // Create new Variable:
+            vm.analyzeVariableLine(lines.get(lineIndex));
 
-            }
         }
     }
 
 
-    /**
-     * @param line
-     * @return
-     */
-    private boolean isGlobalVar(String line) {
-        Matcher intMatcher, doubleMatcher, stringMatcher, charMatcher, booleanMatcher;
-        intMatcher = INT_DEC_PATTERN.matcher(line);
-        doubleMatcher = DOUBLE_DEC_PATTERN.matcher(line);
-        stringMatcher = STRING_DEC_PATTERN.matcher(line);
-        charMatcher = CHAR_DEC_PATTERN.matcher(line);
-        booleanMatcher = BOOLEAN_DEC_PATTERN.matcher(line);
-
-
-        if (intMatcher.matches() || doubleMatcher.matches() || stringMatcher.matches() ||
-                charMatcher.matches() || booleanMatcher.matches()) {
-            return true;
-        }
-        return false;
-    }
+//    /**
+//     * @param line
+//     * @return
+//     */
+//    private boolean isGlobalVar(String line) {
+//        Matcher intMatcher, doubleMatcher, stringMatcher, charMatcher, booleanMatcher;
+//        intMatcher = INT_DEC_PATTERN.matcher(line);
+//        doubleMatcher = DOUBLE_DEC_PATTERN.matcher(line);
+//        stringMatcher = STRING_DEC_PATTERN.matcher(line);
+//        charMatcher = CHAR_DEC_PATTERN.matcher(line);
+//        booleanMatcher = BOOLEAN_DEC_PATTERN.matcher(line);
+//
+//
+//        if (intMatcher.matches() || doubleMatcher.matches() || stringMatcher.matches() ||
+//                charMatcher.matches() || booleanMatcher.matches()) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     private void checkMethods() throws MethodException {
         Method m;
         for (Pair<Integer, Integer> p : this.methodsLines.values()) {
-            m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1),methodsDeclarations);
+            m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1), methodsDeclarations);
             m.analyze();
         }
     }
@@ -127,7 +123,6 @@ public class CodeManager {
         // Iterate from the current line:
         int lineIndex;
         for (lineIndex = startingLine + 1; lineIndex < lines.size(); lineIndex++) {
-
             String currentLine = lines.get(lineIndex);
             ifWhile = IF_WHILE_BLOCK_PATTERN.matcher(currentLine);
             if (ifWhile.matches()) {

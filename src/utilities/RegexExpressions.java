@@ -27,7 +27,7 @@ public class RegexExpressions {
     private static final String BOOLEAN_TYPE = "(true|false|" + INT_TYPE + "|" + DOUBLE_TYPE + ")";
 
     private static final String INT_VAR_DECLARATION =
-            "\\s*(final\\s+)?(int)\\s+\\w+\\s*(=" + INT_TYPE + ")?(,\\s*\\w+\\s*(=" + INT_TYPE + ")?)*;\\s*";
+            "\\s*(final\\s+)?(int)\\s+\\w+\\s*(=\\(" + INT_TYPE + "\\)|\\(" + PARAMS_NAME +"\\))?(,\\s*\\w+\\s*(=" + INT_TYPE + ")?)*;\\s*";
     private static final String DOUBLE_VAR_DECLARATION =
             "\\s*(final\\s+)?(double)\\s+\\w+\\s*(=" + DOUBLE_TYPE + ")?(,\\s*\\w+\\s*(=" + DOUBLE_TYPE +
                     ")?)*;\\s*";
@@ -73,7 +73,7 @@ public class RegexExpressions {
     private static final String METHOD_CALLING_BLOCK =
             "^\\s*(?!\\s*if\\s*\\(+.*\\)+\\s*\\{+\\s*$|\\s*while\\s*\\(+.*\\)+\\s*\\{+\\s*$)\\S*\\s*\\(+.*\\)+\\s*;+\\s*$";
 
-    // Compile them:
+    // Compile Regexes:
     public static final Pattern IF_WHILE_BLOCK_PATTERN = Pattern.compile(IF_WHILE_BLOCK);
     public static final Pattern METHOD_CALLING_BLOCK_PATTERN = Pattern.compile(METHOD_CALLING_BLOCK);
     public static final Pattern RETURN_BLOCK_PATTERN = Pattern.compile(RETURN_BLOCK);
@@ -88,7 +88,7 @@ public class RegexExpressions {
         intDecs.add("    final  int  grg = 5,r; ");
         intDecs.add("     int  grg = 5,r; ");
         intDecs.add("    final  int  grg = 5,r=8; ");
-        intDecs.add("      int  grg = 5,r=8,f      ,f,     f,f;");
+//        intDecs.add("      int  grg = 5,r=8,f      ,f,     f,f;");
         intDecs.add("int  t,r=8; ");
 //        intDecs.add("int  t,r=jkjhkjhj; ");
 
