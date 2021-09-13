@@ -20,26 +20,22 @@ import java.util.*;
 /**
  * a class represents a single block in a code.
  */
-public class IfWhileBlock {
+public class Block {
 
-    private List<String> blockLines;
+    private List<Pair<String,Integer>> blockLines;
     private Map<String, Variable> variables;
     private Map<String, List<String>> methodsList;
-    private Pair<Integer,Integer> linePair;
 
-    public IfWhileBlock(List<String> methodLines, Map<String, List<String>> methodsList,Pair<Integer,Integer> linePair) {
-        this.blockLines = methodLines;
+    public Block(List<Pair<String,Integer>>  blockLines, Map<String, List<String>> methodsList) {
+        this.blockLines =  blockLines;
         this.variables = new HashMap<>();
         this.methodsList = methodsList;
-        this.linePair = linePair;
     }
 
 
-    private void checkBlock() throws MethodException, VariableException {
-        int lineIndex = linePair.getFirst();
-        for (String line : blockLines){
-            classifyLine(line,lineIndex);
-            lineIndex++;
+   public void checkBlock() throws MethodException, VariableException {
+        for (Pair<String,Integer> line : blockLines){
+            classifyLine(line.getFirst(),line.getSecond());
 
         }
     }

@@ -40,6 +40,7 @@ public class RegexExpressions {
             "\\s*(final\\s+)?(boolean)\\s+\\w+\\s*(=" + BOOLEAN_TYPE + ")?(,\\s*\\w+\\s*(=" + BOOLEAN_TYPE +
                     ")?)*;\\s*";
 
+
     public static final char COMMA = ',';
     public static final String OR_OPERATOR = "\\|\\|";
     public static final String AND_OPERATOR = "&&";
@@ -78,7 +79,7 @@ public class RegexExpressions {
     private static final String IF_WHILE_BLOCK = "\\s*(if|while)\\s*\\(.*\\)\\s*\\{\\s*";
     private static final String RETURN_BLOCK = "\\s*return\\s*;\\s*";
     private static final String METHOD_CALLING_BLOCK =
-            "^\\s*(?!\\s*if\\s*\\(+.*\\)+\\s*\\{+\\s*$|\\s*while\\s*\\(+.*\\)+\\s*\\{+\\s*$)\\S*\\s*\\(+.*\\)+\\s*;+\\s*$";
+            "^\\s*(?!\\s*if\\s*\\(+.*\\)+\\s*\\{+\\s*$|\\s*while\\s*\\(+.*\\)+\\s*\\{+\\s*$)\\S*\\s*\\(+.*\\)+\\s*;\\s*$";
 
     // Compile Regexes:
     public static final Pattern IF_WHILE_BLOCK_PATTERN = Pattern.compile(IF_WHILE_BLOCK);

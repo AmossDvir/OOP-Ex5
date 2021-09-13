@@ -109,7 +109,7 @@ public class CodeManager {
 //        return false;
 //    }
 
-    private void checkMethods() throws MethodException {
+    private void checkMethods() throws MethodException, VariableException {
         Method m;
         for (Pair<Integer, Integer> p : this.methodsLines.values()) {
             m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1), methodsDeclarations);
@@ -151,26 +151,5 @@ public class CodeManager {
         this.checkMethods();
     }
 
-    public static void main(String[] args) throws BlockException, DeclarationException {
-        List<String> code = new ArrayList<>();
-        code.add("void foo(){");
-        code.add("if(trh){");
-        code.add("}");
-        code.add("return;");
-        code.add("}");
-        code.add("void foo2(){");
-        code.add("while(trytfdytfh){");
-        code.add("}");
-        code.add("return;");
-        code.add("}");
 
-        CodeManager cm = new CodeManager(code);
-        cm.registerMethods();
-    }
 }
-
-
-/*
-int a =b;
-int b =4;
- */

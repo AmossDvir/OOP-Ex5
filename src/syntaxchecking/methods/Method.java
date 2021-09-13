@@ -1,8 +1,11 @@
 package syntaxchecking.methods;
 
+import syntaxchecking.blocks.Block;
+import syntaxchecking.blocks.exceptions.BlockException;
 import syntaxchecking.methods.declarations.VoidDeclaration;
 import syntaxchecking.methods.exceptions.MethodException;
 import syntaxchecking.variables.Variable;
+import syntaxchecking.variables.VariableException;
 import utilities.MethodsPair;
 import utilities.Pair;
 
@@ -21,55 +24,63 @@ public class Method {
     private Map<String, Variable> variables;
     private Map<String, List<String>> methodsList;
     private Set<Integer> checkedLines;
-    private Map<Integer,Integer> blocksTree;
+
 
     public Method(List<String> methodLines, Map<String, List<String>> methodsList) {
         this.methodLines = methodLines;
         this.variables = new HashMap<>();
         this.methodsList = methodsList;
         checkedLines = new HashSet<>();
-        blocksTree = new HashMap<>();
     }
 
     /**
      * @return
      * @throws MethodException
      */
-    public void analyze() throws MethodException {
-        MethodsPair m = VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
+    public void analyze() throws MethodException, VariableException {
+        VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
         List<Pair<Integer, Integer>> blockLines = registerBlocks();
-        List<List<String>> blocksLst = cutAndArrangeBlock(blockLines);
-
-        for(List<String> lst:blocksLst){
-            for(String line:lst){
-                System.out.println(line);
-
-            }
-            System.out.println("-----------");
+        List<List<Pair<String,Integer>>> blocksLst = cutAndArrangeBlock(blockLines);
+        // Check block by block
+        for (int i = 0; i < blocksLst.size(); i++) {
+            Block block = new Block(blocksLst.get(i), methodsList);
+            block.checkBlock();
         }
+        methodEnding(blocksLst.get(0));
 
 
+    }
+    private void methodEnding(List<Pair<String,Integer>> mainBlock) throws BlockException {
+        // Check the main block(the method structure)
+        Matcher matcher = RETURN_BLOCK_PATTERN.matcher(mainBlock.get(mainBlock.size() - 2).getFirst());
+        if (!matcher.matches()) {
+            throw new BlockException();
 
-//        for()
-//         TODO: CONTINUE
+        }
+        matcher = CLOSING_BRACKETS_PATTERN.matcher(mainBlock.get(mainBlock.size() - 1).getFirst());
+        if (!matcher.matches()) {
+            throw new BlockException();
+
+        }
 
     }
 
-    private List<List<String>> cutAndArrangeBlock(List<Pair<Integer,Integer>> blocks){
-        List<List<String>> retLst = new ArrayList<>();
+    private List<List<Pair<String,Integer>>> cutAndArrangeBlock(List<Pair<Integer,Integer>> blocks){
+        List<List<Pair<String,Integer>>> retLst = new ArrayList<>();
         for(Pair<Integer,Integer> p:blocks){
-            List<String> tmpBlockLines = new ArrayList<>();
+            List<Pair<String,Integer>> tmpBlockLines = new ArrayList<>();
             for(int i = p.getFirst();i < p.getSecond() + 1; i++)
                 if(!checkedLines.contains(i)){
-                    tmpBlockLines.add(methodLines.get(i));
+
+                    tmpBlockLines.add(new Pair<String,Integer>(methodLines.get(i),i));
                     checkedLines.add(i);
                 }
             retLst.add(tmpBlockLines);
         }
-        List<String> mainBlock = new ArrayList<>();
+        List<Pair<String,Integer>> mainBlock = new ArrayList<>();
         for(int i = FIRST_LINE; i < methodLines.size(); i++){
             if(!checkedLines.contains(i)){
-                mainBlock.add(methodLines.get(i));
+                mainBlock.add(new Pair<String,Integer>(methodLines.get(i),i));
             }
         }
         retLst.add(mainBlock);
@@ -95,9 +106,6 @@ public class Method {
         return blockLines;
     }
 
-    private void buildHierarchyTree(){
-
-    }
 
     private List<Pair<Integer, Integer>> divideIntoBlocks(int startingLine,
                                                           List<Pair<Integer, Integer>> pairsLst) {
@@ -126,33 +134,4 @@ public class Method {
         return methodLine.substring(methodLine.indexOf(' ') + 1, methodLine.indexOf("("));
     }
 
-
-    public static void main(String[] args) throws MethodException {
-        List<String> m = new ArrayList<>();
-        Map<String, List<String>> methodsList=new HashMap<>();
-        // Test these:
-        //0:
-        m.add("void foo(){");
-        m.add("int a = 5;");
-        //1:
-        m.add("if(1){");
-        m.add("int b = a;");
-        m.add("1line");
-        //2:
-        m.add("if(2){");
-        m.add("int c = m;");
-        //3:
-        m.add("if(3){");
-        m.add("3line");
-        m.add("}");
-        m.add("2line");
-        m.add("}");
-        m.add("}");
-        m.add("int m = 5;");
-
-        m.add("return;");
-        m.add("}");
-        Method meth = new Method(m,methodsList);
-        meth.analyze();
-    }
 }
