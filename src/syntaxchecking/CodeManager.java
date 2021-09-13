@@ -83,7 +83,7 @@ public class CodeManager {
             // Global variable declaration line:
             VariablesManager vm = new VariablesManager(globalVars);
             // Create new Variable:
-            vm.analyzeVariableLine(lines.get(lineIndex));
+            vm.analyzeVariableLine(lines.get(lineIndex),lineIndex,true);
 
         }
     }

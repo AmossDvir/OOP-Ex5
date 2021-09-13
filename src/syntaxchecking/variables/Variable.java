@@ -12,10 +12,17 @@ import static utilities.RegexExpressions.PARAMS_NAME_PATTERN;
 import static utilities.StringManipulations.splitToWords;
 
 public class Variable {
+    public static final int GLOBAL = 0;
+
+
     private String name;
     private String type;
     private boolean isFinal;
     private boolean isInitialized;
+
+
+
+    private int definedAtLine;
 
 
     public Variable() {
@@ -23,18 +30,22 @@ public class Variable {
         this.isInitialized = false;
         this.type = null;
         this.name = null;
+        this.definedAtLine = 0;
     }
-    public Variable(String name,String type,boolean isFinal) {
+    public Variable(String name,String type,boolean isFinal,int definedAtLine) {
         this.isFinal = isFinal;
         this.isInitialized = false;
         this.type = type;
         this.name = name;
+        this.definedAtLine = definedAtLine;
     }
-    public Variable(String name,String type,boolean isFinal,boolean isInitialized) {
+    public Variable(String name,String type,boolean isFinal,boolean isInitialized,int definedAtLine) {
         this.isFinal = isFinal;
         this.isInitialized = isInitialized;
         this.type = type;
         this.name = name;
+        this.definedAtLine = definedAtLine;
+
     }
 
     public String getName() {
@@ -74,6 +85,10 @@ public class Variable {
 
     public void setInitialized(boolean initialized) {
         isInitialized = initialized;
+    }
+
+    public int getDefinedLine() {
+        return definedAtLine;
     }
 }
 

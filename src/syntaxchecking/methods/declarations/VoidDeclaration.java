@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 
 import static syntaxchecking.ReservedWords.*;
 import static syntaxchecking.methods.Method.extractMethodName;
+import static syntaxchecking.variables.Variable.GLOBAL;
 import static utilities.RegexExpressions.*;
 import static utilities.StringManipulations.*;
 
@@ -20,6 +21,7 @@ import static utilities.StringManipulations.*;
  * a static class that analyzes methods' declarations.
  */
 public class VoidDeclaration {
+
 
     /**
      * Gets a line of code
@@ -77,6 +79,6 @@ public class VoidDeclaration {
             throw new DeclarationException();
         }
 
-        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag, true);
+        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag, true, GLOBAL);
     }
 }

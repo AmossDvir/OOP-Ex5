@@ -45,6 +45,10 @@ public class RegexExpressions {
     public static final String AND_OPERATOR = "&&";
     public static final String WHITE_SPACE = " ";
     public static final char WHITE_SPACE_CHAR = ' ';
+    public static final String COMMENT_LINE = "//.*";
+    public static final String BLANK_LINE = "\\s*";
+
+
 
     // Compile Regexes:
     public static final Pattern VOID_METHOD_DEC_PATTERN = Pattern.compile(VOID_METHODS_DECLARATION);
@@ -64,6 +68,9 @@ public class RegexExpressions {
     public static final Pattern BOOLEAN_DEC_PATTERN = Pattern.compile(BOOLEAN_VAR_DECLARATION);
 
     public static final Pattern CLOSING_BRACKETS_PATTERN = Pattern.compile(CLOSING_BRACKETS);
+
+    public static final Pattern COMMENT_LINE_PATTERN = Pattern.compile(COMMENT_LINE);
+    public static final Pattern BLANK_LINE_PATTERN = Pattern.compile(BLANK_LINE);
 
 
 

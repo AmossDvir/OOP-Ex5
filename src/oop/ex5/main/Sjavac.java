@@ -10,6 +10,8 @@ import syntaxchecking.variables.VariableException;
 import java.io.IOException;
 import java.util.List;
 
+import static fileshandling.TextParser.removeUnnecessaryLines;
+
 public class Sjavac {
     /**
      * Main method of the program.
@@ -19,6 +21,7 @@ public class Sjavac {
     public static void main(String[] args) {
         try {
             List<String> lines = FileReader.readFile(args[0]);
+            removeUnnecessaryLines(lines);
             CodeManager cm = new CodeManager(lines);
             cm.checkCode();
 //            int result = cm.checkCode();

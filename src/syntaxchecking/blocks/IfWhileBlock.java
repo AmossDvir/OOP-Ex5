@@ -25,17 +25,21 @@ public class IfWhileBlock {
     private List<String> blockLines;
     private Map<String, Variable> variables;
     private Map<String, List<String>> methodsList;
+    private Pair<Integer,Integer> linePair;
 
-    public IfWhileBlock(List<String> methodLines, Map<String, List<String>> methodsList) {
+    public IfWhileBlock(List<String> methodLines, Map<String, List<String>> methodsList,Pair<Integer,Integer> linePair) {
         this.blockLines = methodLines;
         this.variables = new HashMap<>();
         this.methodsList = methodsList;
+        this.linePair = linePair;
     }
 
 
     private void checkBlock() throws MethodException, VariableException {
+        int lineIndex = linePair.getFirst();
         for (String line : blockLines){
-            classifyLine(line);
+            classifyLine(line,lineIndex);
+            lineIndex++;
 
         }
     }
@@ -43,7 +47,7 @@ public class IfWhileBlock {
     /**
      * Classifies a given line and invokes the corresponding method.
      */
-    private void classifyLine(String line) throws MethodException, VariableException {
+    private void classifyLine(String line,int lineIndex) throws MethodException, VariableException {
         Matcher lineMatcher = IF_WHILE_BLOCK_PATTERN.matcher(line);
         Matcher closeMatcher = CLOSING_BRACKETS_PATTERN.matcher(line);
         if (lineMatcher.matches()) {
@@ -58,7 +62,7 @@ public class IfWhileBlock {
         }
         if (isVar(line)){
             VariablesManager varMan = new VariablesManager(variables);
-            varMan.analyzeVariableLine(line);
+            varMan.analyzeVariableLine(line,lineIndex,false);
         }
         lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
         if (!lineMatcher.matches()||closeMatcher.matches()) {
@@ -86,22 +90,5 @@ public class IfWhileBlock {
             return true;
         }
         return false;
-     * Returns the smallest
-     * @return
-     */
-    private Pair<Integer,Integer> findMostInnerBlock(List<Pair<Integer,Integer>> blocksLines){
-        int difference = blocksLines.get(0).getSecond()-blocksLines.get(0).getFirst();
-        Pair<Integer,Integer> retValue= new Pair<>(blocksLines.get(0).getFirst(),blocksLines.get(0).getSecond());
-        for(Pair<Integer,Integer> p:blocksLines){
-            if(p.getSecond()-p.getFirst() < difference){
-                difference = p.getSecond()-p.getFirst();
-                retValue = new Pair<>(p.getFirst(),p.getSecond());
-            }
-        }
-        return retValue;
-    }
-
-        private void checkParentheses() throws BlockException {
-
     }
 }
