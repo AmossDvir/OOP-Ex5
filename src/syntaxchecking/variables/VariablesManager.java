@@ -26,7 +26,11 @@ public class VariablesManager {
     }
 
     public void analyzeVariableLine(String line, int lineIndex, boolean isGlobal) throws VariableException {
+        // Replace White spaces around the equals sign with just one:
         line = line.replaceAll("\\s*=\\s*", "\\s=\\s");
+        // Take out semicolon:
+        line = line.replaceAll("\\s*;\\s*", "");
+
         List<String> words = splitToWords(line.replaceAll(",", " "));
         prefixCheck(words, lineIndex, isGlobal);
     }

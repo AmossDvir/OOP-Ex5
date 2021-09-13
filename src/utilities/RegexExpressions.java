@@ -27,28 +27,37 @@ public class RegexExpressions {
     private static final String BOOLEAN_TYPE = "(true|false|" + INT_TYPE + "|" + DOUBLE_TYPE + ")";
 
     private static final String INT_VAR_DECLARATION =
-            "\\s*(final\\s+)?(int)\\s+\\w+\\s*(=\\(" + INT_TYPE + "\\)|\\(" + PARAMS_NAME +"\\))?(,\\s*\\w+\\s*(=" + INT_TYPE + ")?)*;\\s*";
+            "\\s*(final\\s+)?(int)\\s+\\w+\\s*(\\s*=\\s*(" + INT_TYPE + "|" + PARAMS_NAME +
+                    "))?\\s*(\\s*,\\s*\\w+\\s*(\\s*=\\s*(" + INT_TYPE + "|" + PARAMS_NAME + "))?)*\\s*;\\s*";
     private static final String DOUBLE_VAR_DECLARATION =
-            "\\s*(final\\s+)?(double)\\s+\\w+\\s*(=" + DOUBLE_TYPE + ")?(,\\s*\\w+\\s*(=" + DOUBLE_TYPE +
-                    ")?)*;\\s*";
+            "\\s*(final\\s+)?(double)\\s+\\w+\\s*(\\s*=\\s*(" + DOUBLE_TYPE + "|" + PARAMS_NAME +
+                    "))?\\s*(\\s*,\\s*\\w+\\s*(\\s*=\\s*(" + DOUBLE_TYPE + "|" + PARAMS_NAME +
+                    "))?)*\\s*;\\s*";
+
     private static final String STRING_VAR_DECLARATION =
-            "\\s*(final\\s+)?(String)\\s+\\w+\\s*(=" + STRING_TYPE + ")?(,\\s*\\w+\\s*(=" + STRING_TYPE +
-                    ")?)*;\\s*";
+            "\\s*(final\\s+)?(String)\\s+\\w+\\s*(\\s*=\\s*(" + STRING_TYPE + "|" + PARAMS_NAME +
+                    "))?\\s*(\\s*,\\s*\\w+\\s*(\\s*=\\s*(" + STRING_TYPE + "|" + PARAMS_NAME +
+                    "))?)*\\s*;\\s*";
+
     private static final String CHAR_VAR_DECLARATION =
-            "\\s*(final\\s+)?(char)\\s+\\w+\\s*(=" + CHAR_TYPE + ")?(,\\s*\\w+\\s*(=" + CHAR_TYPE + ")?)*;\\s*";
+            "\\s*(final\\s+)?(char)\\s+\\w+\\s*(\\s*=\\s*(" + CHAR_TYPE + "|" + PARAMS_NAME +
+                    "))?\\s*(\\s*,\\s*\\w+\\s*(\\s*=\\s*(" + CHAR_TYPE + "|" + PARAMS_NAME + "))?)*\\s*;\\s*";
+
     private static final String BOOLEAN_VAR_DECLARATION =
-            "\\s*(final\\s+)?(boolean)\\s+\\w+\\s*(=" + BOOLEAN_TYPE + ")?(,\\s*\\w+\\s*(=" + BOOLEAN_TYPE +
-                    ")?)*;\\s*";
+            "\\s*(final\\s+)?(boolean)\\s+\\w+\\s*(\\s*=\\s*(" + BOOLEAN_TYPE + "|" + PARAMS_NAME +
+                    "))?\\s*(\\s*,\\s*\\w+\\s*(\\s*=\\s*(" + BOOLEAN_TYPE + "|" + PARAMS_NAME +
+                    "))?)*\\s*;\\s*";
+
+
+    private static final String GENERAL_ASSIGNMENT = "\\s*" + PARAMS_NAME + "\\s*=\\s*.+\\s*;\\s*";
 
 
     public static final char COMMA = ',';
     public static final String OR_OPERATOR = "\\|\\|";
     public static final String AND_OPERATOR = "&&";
     public static final String WHITE_SPACE = " ";
-    public static final char WHITE_SPACE_CHAR = ' ';
     public static final String COMMENT_LINE = "//.*";
     public static final String BLANK_LINE = "\\s*";
-
 
 
     // Compile Regexes:
@@ -67,12 +76,12 @@ public class RegexExpressions {
     public static final Pattern STRING_DEC_PATTERN = Pattern.compile(STRING_VAR_DECLARATION);
     public static final Pattern CHAR_DEC_PATTERN = Pattern.compile(CHAR_VAR_DECLARATION);
     public static final Pattern BOOLEAN_DEC_PATTERN = Pattern.compile(BOOLEAN_VAR_DECLARATION);
+    public static final Pattern GENERAL_ASSIGNMENT_PATTERN = Pattern.compile(GENERAL_ASSIGNMENT);
 
     public static final Pattern CLOSING_BRACKETS_PATTERN = Pattern.compile(CLOSING_BRACKETS);
 
     public static final Pattern COMMENT_LINE_PATTERN = Pattern.compile(COMMENT_LINE);
     public static final Pattern BLANK_LINE_PATTERN = Pattern.compile(BLANK_LINE);
-
 
 
     // Line Classification:
@@ -93,21 +102,22 @@ public class RegexExpressions {
         String failedStr = "";
         List<String> intDecs = new ArrayList<>();
         // Test these:
+        intDecs.add("int grg = dh;");
         intDecs.add("    final  int  grg = 5,r; ");
         intDecs.add("     int  grg = 5,r; ");
-        intDecs.add("    final  int  grg = 5,r=8; ");
-//        intDecs.add("      int  grg = 5,r=8,f      ,f,     f,f;");
-        intDecs.add("int  t,r=8; ");
-//        intDecs.add("int  t,r=jkjhkjhj; ");
+        intDecs.add("    final  int  grg = 5,r=c; ");
+        intDecs.add("      int  grg = 5,r=8,f      ,f,     f,f;");
+        intDecs.add("char  t,r=\"\"; ");
+        intDecs.add("int  t,r=jkjhkjhj; ");
 
         // Check if everything matches:
-        for(String intDec:intDecs){
+        for (String intDec : intDecs) {
             matcher = INT_DEC_PATTERN.matcher(intDec);
-            if(!matcher.matches()){
+            if (!matcher.matches()) {
                 isMatching = false;
                 failedStr = intDec;
             }
         }
-        System.out.println(isMatching ?"Passed all tests!":"Failed at: " + failedStr);
+        System.out.println(isMatching ? "Passed all tests!" : "Failed at: " + failedStr);
     }
 }

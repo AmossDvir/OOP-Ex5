@@ -73,16 +73,17 @@ public class Block {
      */
     //TODO: UPDATE DECLARATIONS AND ADDING ASSIGHMENT PATTERN
     private boolean isVar(String line) {
-        Matcher intMatcher, doubleMatcher, stringMatcher, charMatcher, booleanMatcher;
+        Matcher intMatcher, doubleMatcher, stringMatcher, charMatcher, booleanMatcher,generalMatcher;
         intMatcher = INT_DEC_PATTERN.matcher(line);
         doubleMatcher = DOUBLE_DEC_PATTERN.matcher(line);
         stringMatcher = STRING_DEC_PATTERN.matcher(line);
         charMatcher = CHAR_DEC_PATTERN.matcher(line);
         booleanMatcher = BOOLEAN_DEC_PATTERN.matcher(line);
+        generalMatcher = GENERAL_ASSIGNMENT_PATTERN.matcher(line);
 
 
         if (intMatcher.matches() || doubleMatcher.matches() || stringMatcher.matches() ||
-                charMatcher.matches() || booleanMatcher.matches()) {
+                charMatcher.matches() || booleanMatcher.matches()||generalMatcher.matches()) {
             return true;
         }
         return false;
