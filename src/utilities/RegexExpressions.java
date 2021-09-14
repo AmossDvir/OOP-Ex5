@@ -13,7 +13,7 @@ public class RegexExpressions {
 
     private static final String VOID_METHODS_DECLARATION = "\\s*void\\s*[a-zA-Z]+\\w*\\s*\\(.*\\)\\s*\\{";
     private static final String EXTRACTION = "\\((.*)\\)";
-    private static final String PARAMS_NAME = "([a-zA-Z]\\w*)|(_\\w+)";
+    private static final String PARAMS_NAME = "([a-zA-Z]\\w*|_\\w+)";
     private static final String CLOSING_BRACKETS = "\\s*\\}\\s*";
 
     public static final String SPLIT_PARAMS = ",+\\s*,*";
@@ -97,27 +97,36 @@ public class RegexExpressions {
 
     // TODO: TEST ZONE,DELETE!!!
     public static void main(String[] args) {
-        Matcher matcher;
-        boolean isMatching = true;
-        String failedStr = "";
-        List<String> intDecs = new ArrayList<>();
+
+        Matcher intvar = INT_DEC_PATTERN.matcher("final int a = 4;");
+        if(!intvar.matches()){
+            System.out.println("wrong at closing bracket");
+        }
+
+
+
+
+//        Matcher matcher;
+//        boolean isMatching = true;
+//        String failedStr = "";
+//        List<String> intDecs = new ArrayList<>();
         // Test these:
-        intDecs.add("int grg = dh;");
-        intDecs.add("    final  int  grg = 5,r; ");
-        intDecs.add("     int  grg = 5,r; ");
-        intDecs.add("    final  int  grg = 5,r=c; ");
-        intDecs.add("      int  grg = 5,r=8,f      ,f,     f,f;");
-        intDecs.add("char  t,r=\"\"; ");
-        intDecs.add("int  t,r=jkjhkjhj; ");
+//        intDecs.add("int grg = dh;");
+//        intDecs.add("    final  int  grg = 5,r; ");
+//        intDecs.add("     int  grg = 5,r; ");
+//        intDecs.add("    final  int  grg = 5,r=c; ");
+//        intDecs.add("      int  grg = 5,r=8,f      ,f,     f,f;");
+//        intDecs.add("char  t,r=\"\"; ");
+//        intDecs.add("int  t,r=jkjhkjhj; ");
 
         // Check if everything matches:
-        for (String intDec : intDecs) {
-            matcher = INT_DEC_PATTERN.matcher(intDec);
-            if (!matcher.matches()) {
-                isMatching = false;
-                failedStr = intDec;
-            }
-        }
-        System.out.println(isMatching ? "Passed all tests!" : "Failed at: " + failedStr);
+//        for (String intDec : intDecs) {
+//            matcher = INT_DEC_PATTERN.matcher(intDec);
+//            if (!matcher.matches()) {
+//                isMatching = false;
+//                failedStr = intDec;
+//            }
+//        }
+//        System.out.println(isMatching ? "Passed all tests!" : "Failed at: " + failedStr);
     }
 }

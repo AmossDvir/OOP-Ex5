@@ -19,6 +19,7 @@ public class Condition {
     // Constants:
     // Define a set of legal variables and initialize it:
     private static final Set<String> LEGAL_TYPES = new HashSet<>();
+
     static {
         LEGAL_TYPES.add(BOOLEAN);
         LEGAL_TYPES.add(DOUBLE);
@@ -76,7 +77,8 @@ public class Condition {
         }
         // Check if subCondition is one of the method's variables:
         if (variables.containsKey(subCondition)) {
-            if (LEGAL_TYPES.contains(variables.get(subCondition).getType())) {
+            if (variables.get(subCondition).isInitialized() &&
+                    LEGAL_TYPES.contains(variables.get(subCondition).getType())) {
                 return;
             }
         }

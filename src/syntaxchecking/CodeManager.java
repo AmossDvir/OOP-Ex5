@@ -11,7 +11,6 @@ import syntaxchecking.variables.VariablesManager;
 import utilities.MethodsPair;
 import utilities.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class CodeManager {
         this.methodsLines = new HashMap<>();
     }
 
-    public void registerMethods() throws BlockException, DeclarationException {
+    public void registerMethods() throws BlockException, DeclarationException, VariableException {
         Matcher declarationMatcher, globalVarMatcher;
         Pair<Integer, Integer> blockLines;
         int lineIndex = 0;
@@ -48,7 +47,7 @@ public class CodeManager {
                 checkMethodsDuplication(mp);
                 blockLines = divideIntoMethods(lineIndex);
                 methodsLines.put(mp.getFirst(), blockLines);
-                lineIndex += blockLines.getSecond();
+                lineIndex += blockLines.getSecond() - blockLines.getFirst();
                 methodsDeclarations.put(mp.getFirst(), mp.getSecond());
             }
         }
@@ -77,42 +76,25 @@ public class CodeManager {
             // Check if a line is already registered as a method:
             for (Pair<Integer, Integer> p : methodsLines.values()) {
                 if (lineIndex == p.getFirst()) {
-                    lineIndex += p.getSecond() + 1;
+                    if (lineIndex + p.getSecond() + 1 - p.getFirst() >= lines.size()) {
+                        return;
+                    } else {
+                        lineIndex += p.getSecond() +- p.getFirst()+ 1;
+                    }
                 }
             }
             // Global variable declaration line:
             VariablesManager vm = new VariablesManager(globalVars);
             // Create new Variable:
-            vm.analyzeVariableLine(lines.get(lineIndex),lineIndex,true);
-
+            vm.analyzeVariableLine(lines.get(lineIndex), lineIndex, true);
         }
     }
 
 
-//    /**
-//     * @param line
-//     * @return
-//     */
-//    private boolean isGlobalVar(String line) {
-//        Matcher intMatcher, doubleMatcher, stringMatcher, charMatcher, booleanMatcher;
-//        intMatcher = INT_DEC_PATTERN.matcher(line);
-//        doubleMatcher = DOUBLE_DEC_PATTERN.matcher(line);
-//        stringMatcher = STRING_DEC_PATTERN.matcher(line);
-//        charMatcher = CHAR_DEC_PATTERN.matcher(line);
-//        booleanMatcher = BOOLEAN_DEC_PATTERN.matcher(line);
-//
-//
-//        if (intMatcher.matches() || doubleMatcher.matches() || stringMatcher.matches() ||
-//                charMatcher.matches() || booleanMatcher.matches()) {
-//            return true;
-//        }
-//        return false;
-//    }
-
     private void checkMethods() throws MethodException, VariableException {
         Method m;
         for (Pair<Integer, Integer> p : this.methodsLines.values()) {
-            m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1), methodsDeclarations);
+            m = new Method(lines.subList(p.getFirst(), p.getSecond() + 1), methodsDeclarations, globalVars);
             m.analyze();
         }
     }
@@ -150,6 +132,4 @@ public class CodeManager {
         this.registerGlobalVars();
         this.checkMethods();
     }
-
-
 }

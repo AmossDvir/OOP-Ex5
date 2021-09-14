@@ -13,7 +13,7 @@ import static utilities.StringManipulations.splitToWords;
 
 public class Variable {
     // Constants:
-    public static final int GLOBAL = 0;
+    public static final int GLOBAL_LINE = 0;
 
     // Members:
     private String name;
@@ -21,6 +21,7 @@ public class Variable {
     private boolean isFinal;
     private boolean isInitialized;
     private int definedAtLine;
+    private boolean isGlobal;
 
     // Constructors:
 
@@ -33,6 +34,7 @@ public class Variable {
         this.type = null;
         this.name = null;
         this.definedAtLine = 0;
+        isGlobal= false;
     }
 
     /**
@@ -42,12 +44,14 @@ public class Variable {
      * @param isFinal: if the variable is final or not.
      * @param definedAtLine: the number of line in which the variable was declared in.
      */
-    public Variable(String name,String type,boolean isFinal,int definedAtLine) {
+    public Variable(String name,String type,boolean isFinal,int definedAtLine,boolean isGlobal) throws VariableException {
         this.isFinal = isFinal;
         this.isInitialized = false;
         this.type = type;
-        this.name = name;
+        setName(name);
         this.definedAtLine = definedAtLine;
+        this.isGlobal=isGlobal ;
+
     }
 
     /**
@@ -58,15 +62,22 @@ public class Variable {
      * @param isInitialized: if the variables is already initialized.
      * @param definedAtLine: the number of line in which the variable was declared in.
      */
-    public Variable(String name,String type,boolean isFinal,boolean isInitialized,int definedAtLine) {
+    public Variable(String name,String type,boolean isFinal,boolean isInitialized,int definedAtLine,boolean isGlobal)
+            throws VariableException {
         this.isFinal = isFinal;
         this.isInitialized = isInitialized;
         this.type = type;
-        this.name = name;
+        setName(name);
         this.definedAtLine = definedAtLine;
+        this.isGlobal=isGlobal ;
+
     }
 
     // Methods:
+
+    public boolean isGlobal() {
+        return isGlobal;
+    }
     /**
      * Returns the name of the variable.
      * @return : String, the name of the variable.
@@ -81,6 +92,9 @@ public class Variable {
      * @throws VariableException: in case it is an invalid name.
      */
     public void setName(String name) throws VariableException {
+        if(TYPES_LIST.contains(name)){
+            throw new VariableException();
+        }
         Matcher matcher = PARAMS_NAME_PATTERN.matcher(name);
         if (!matcher.matches()) {
             throw new VariableException();

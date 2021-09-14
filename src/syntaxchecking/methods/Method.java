@@ -18,7 +18,6 @@ import static utilities.RegexExpressions.*;
  *
  */
 public class Method {
-    public static final int F = 1;
     public static final int FIRST_LINE = 1;
     private List<String> methodLines;
     private Map<String, Variable> variables;
@@ -26,11 +25,13 @@ public class Method {
     private Set<Integer> checkedLines;
 
 
-    public Method(List<String> methodLines, Map<String, List<String>> methodsList) {
+    public Method(List<String> methodLines, Map<String, List<String>> methodsList,
+                  Map<String, Variable> globalVars) {
         this.methodLines = methodLines;
         this.variables = new HashMap<>();
         this.methodsList = methodsList;
         checkedLines = new HashSet<>();
+        variables.putAll(globalVars);
     }
 
     /**
@@ -40,18 +41,22 @@ public class Method {
     public void analyze() throws MethodException, VariableException {
         VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
         List<Pair<Integer, Integer>> blockLines = registerBlocks();
-        List<List<Pair<String,Integer>>> blocksLst = cutAndArrangeBlock(blockLines);
+        List<List<Pair<String, Integer>>> blocksLst = cutAndArrangeBlock(blockLines);
         // Check block by block
         for (int i = 0; i < blocksLst.size(); i++) {
-            Block block = new Block(blocksLst.get(i), methodsList);
+            Block block = new Block(blocksLst.get(i), methodsList, variables);
             block.checkBlock();
         }
         methodEnding(blocksLst.get(0));
 
 
     }
-    private void methodEnding(List<Pair<String,Integer>> mainBlock) throws BlockException {
+
+    private void methodEnding(List<Pair<String, Integer>> mainBlock) throws BlockException {
         // Check the main block(the method structure)
+        if (mainBlock.size() < 2) {
+            throw new BlockException();
+        }
         Matcher matcher = RETURN_BLOCK_PATTERN.matcher(mainBlock.get(mainBlock.size() - 2).getFirst());
         if (!matcher.matches()) {
             throw new BlockException();
@@ -65,22 +70,21 @@ public class Method {
 
     }
 
-    private List<List<Pair<String,Integer>>> cutAndArrangeBlock(List<Pair<Integer,Integer>> blocks){
-        List<List<Pair<String,Integer>>> retLst = new ArrayList<>();
-        for(Pair<Integer,Integer> p:blocks){
-            List<Pair<String,Integer>> tmpBlockLines = new ArrayList<>();
-            for(int i = p.getFirst();i < p.getSecond() + 1; i++)
-                if(!checkedLines.contains(i)){
-
-                    tmpBlockLines.add(new Pair<String,Integer>(methodLines.get(i),i));
+    private List<List<Pair<String, Integer>>> cutAndArrangeBlock(List<Pair<Integer, Integer>> blocks) {
+        List<List<Pair<String, Integer>>> retLst = new ArrayList<>();
+        for (Pair<Integer, Integer> p : blocks) {
+            List<Pair<String, Integer>> tmpBlockLines = new ArrayList<>();
+            for (int i = p.getFirst(); i < p.getSecond() + 1; i++)
+                if (!checkedLines.contains(i)) {
+                    tmpBlockLines.add(new Pair<String, Integer>(methodLines.get(i), i));
                     checkedLines.add(i);
                 }
             retLst.add(tmpBlockLines);
         }
-        List<Pair<String,Integer>> mainBlock = new ArrayList<>();
-        for(int i = FIRST_LINE; i < methodLines.size(); i++){
-            if(!checkedLines.contains(i)){
-                mainBlock.add(new Pair<String,Integer>(methodLines.get(i),i));
+        List<Pair<String, Integer>> mainBlock = new ArrayList<>();
+        for (int i = FIRST_LINE; i < methodLines.size(); i++) {
+            if (!checkedLines.contains(i)) {
+                mainBlock.add(new Pair<String, Integer>(methodLines.get(i), i));
             }
         }
         retLst.add(mainBlock);
@@ -88,8 +92,7 @@ public class Method {
         return retLst;
     }
 
-    private List<Pair<Integer,Integer>> registerBlocks() {
-
+    private List<Pair<Integer, Integer>> registerBlocks() {
         int lineIndex = 0;
         Matcher ifWhileBlockMatcher;
         List<Pair<Integer, Integer>> blockLines = new ArrayList<>();
@@ -99,18 +102,27 @@ public class Method {
             ifWhileBlockMatcher = IF_WHILE_BLOCK_PATTERN.matcher(methodLines.get(lineIndex));
             if (ifWhileBlockMatcher.matches()) {
                 List<Pair<Integer, Integer>> tmp = new ArrayList<>();
-                blockLines = divideIntoBlocks(lineIndex, tmp);
-                break;
+                blockLines.addAll(divideIntoBlocks(lineIndex, tmp));
+                lineIndex = getLastLineBlock(blockLines);
             }
         }
         return blockLines;
     }
 
+    private int getLastLineBlock(List<Pair<Integer,Integer>> blocks){
+        int maxLine = 0;
+        for(Pair<Integer,Integer> p:blocks){
+            if(p.getSecond() > maxLine){
+                maxLine = p.getSecond();
+            }
+        }
+        return maxLine;
+    }
 
     private List<Pair<Integer, Integer>> divideIntoBlocks(int startingLine,
                                                           List<Pair<Integer, Integer>> pairsLst) {
         Matcher closingBlockMatcher, ifWhileMatcher;
-        int line = startingLine+1;
+        int line = startingLine + 1;
         for (; line < methodLines.size(); line++) {
             closingBlockMatcher = CLOSING_BRACKETS_PATTERN.matcher(methodLines.get(line));
             if (closingBlockMatcher.matches()) {
@@ -120,7 +132,8 @@ public class Method {
             ifWhileMatcher = IF_WHILE_BLOCK_PATTERN.matcher(methodLines.get(line));
             if (ifWhileMatcher.matches()) {
                 pairsLst = divideIntoBlocks(line, pairsLst);
-                line += pairsLst.get(pairsLst.size()-1).getSecond()-pairsLst.get(pairsLst.size()-1).getFirst();
+                line += pairsLst.get(pairsLst.size() - 1).getSecond() -
+                        pairsLst.get(pairsLst.size() - 1).getFirst();
             }
         }
         return pairsLst;
@@ -131,6 +144,7 @@ public class Method {
      * @return
      */
     public static String extractMethodName(String methodLine) {
+
         return methodLine.substring(methodLine.indexOf(' ') + 1, methodLine.indexOf("("));
     }
 

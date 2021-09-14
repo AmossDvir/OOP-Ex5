@@ -3,6 +3,7 @@ package syntaxchecking.methods.declarations;
 import syntaxchecking.VariablesTypes;
 import syntaxchecking.methods.exceptions.DeclarationException;
 import syntaxchecking.variables.Variable;
+import syntaxchecking.variables.VariableException;
 import utilities.MethodsPair;
 
 import java.util.*;
@@ -10,7 +11,7 @@ import java.util.regex.Matcher;
 
 import static syntaxchecking.ReservedWords.*;
 import static syntaxchecking.methods.Method.extractMethodName;
-import static syntaxchecking.variables.Variable.GLOBAL;
+import static syntaxchecking.variables.Variable.GLOBAL_LINE;
 import static utilities.RegexExpressions.*;
 import static utilities.StringManipulations.*;
 
@@ -32,7 +33,7 @@ public class VoidDeclaration {
      * @throws DeclarationException: in case of invalid arguments.
      */
     public static MethodsPair analyzeDeclaration(String line, Map<String, Variable> paramsMap)
-            throws DeclarationException {
+            throws DeclarationException, VariableException {
 
         // Take out the parameters:
         String params = extractFromParantheses(line);
@@ -47,7 +48,11 @@ public class VoidDeclaration {
             // Put parameters in paramsMap:
             List<String> typesList = new ArrayList<>();
             for (String param : paramsList) {
+
                 Variable temp = analyzeParameter(param);
+                if (paramsMap.containsKey(temp.getName())){
+                    throw new VariableException();
+                }
                 paramsMap.put(temp.getName(), temp);
                 typesList.add(temp.getType());
             }
@@ -62,7 +67,7 @@ public class VoidDeclaration {
      * @return : a Variables object.
      * @throws DeclarationException: in case of invalid parameter String.
      */
-    public static Variable analyzeParameter(String paramLine) throws DeclarationException {
+    public static Variable analyzeParameter(String paramLine) throws DeclarationException, VariableException {
         // Split it:
         List<String> paramsList = splitToWords(paramLine);
         boolean finalFlag = false;
@@ -89,6 +94,6 @@ public class VoidDeclaration {
         if (!matcher.matches()) {
             throw new DeclarationException();
         }
-        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag, true, GLOBAL);
+        return new Variable(paramsList.get(place + 1), paramsList.get(place), finalFlag,true, GLOBAL_LINE,false);
     }
 }

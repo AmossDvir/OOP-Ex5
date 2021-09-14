@@ -26,9 +26,9 @@ public class Block {
     private Map<String, Variable> variables;
     private Map<String, List<String>> methodsList;
 
-    public Block(List<Pair<String,Integer>>  blockLines, Map<String, List<String>> methodsList) {
+    public Block(List<Pair<String,Integer>>  blockLines, Map<String, List<String>> methodsList,Map<String,Variable> variables) {
         this.blockLines =  blockLines;
-        this.variables = new HashMap<>();
+        this.variables = variables;
         this.methodsList = methodsList;
     }
 
@@ -49,23 +49,24 @@ public class Block {
         if (lineMatcher.matches()) {
             Condition condition = new Condition(line, variables);
             condition.checkCondition();
-
+            return;
         }
         lineMatcher = METHOD_CALLING_BLOCK_PATTERN.matcher(line);
         if (lineMatcher.matches()) {
             MethodCall call = new MethodCall(line, methodsList);
             call.checkMethodCall();
+            return;
         }
+        // Check if line is a variable declaration or assignment:
         if (isVar(line)){
             VariablesManager varMan = new VariablesManager(variables);
             varMan.analyzeVariableLine(line,lineIndex,false);
+            return;
         }
         lineMatcher = RETURN_BLOCK_PATTERN.matcher(line);
-        if (!lineMatcher.matches()||closeMatcher.matches()) {
+        if (!lineMatcher.matches() && !closeMatcher.matches()) {
             throw new BlockException();
-
         }
-
     }
     /**
      * @param line
