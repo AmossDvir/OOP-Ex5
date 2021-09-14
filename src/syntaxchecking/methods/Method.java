@@ -21,6 +21,7 @@ public class Method {
     public static final int FIRST_LINE = 1;
     private List<String> methodLines;
     private Map<String, Variable> variables;
+    private Map<String, Variable> defaultVar;
     private Map<String, List<String>> methodsList;
     private Set<Integer> checkedLines;
 
@@ -28,10 +29,10 @@ public class Method {
     public Method(List<String> methodLines, Map<String, List<String>> methodsList,
                   Map<String, Variable> globalVars) {
         this.methodLines = methodLines;
-        this.variables = new HashMap<>();
+        this.defaultVar = new HashMap<>();
         this.methodsList = methodsList;
         checkedLines = new HashSet<>();
-        variables.putAll(globalVars);
+        defaultVar.putAll(globalVars);
     }
 
     /**
@@ -39,18 +40,26 @@ public class Method {
      * @throws MethodException
      */
     public void analyze() throws MethodException, VariableException {
-        VoidDeclaration.analyzeDeclaration(methodLines.get(0), variables);
+        VoidDeclaration.analyzeDeclaration(methodLines.get(0), defaultVar);
         List<Pair<Integer, Integer>> blockLines = registerBlocks();
         List<List<Pair<String, Integer>>> blocksLst = cutAndArrangeBlock(blockLines);
+        Collections.reverse(blockLines);
         // Check block by block
-        for (int i = 0; i < blocksLst.size(); i++) {
-            Block block = new Block(blocksLst.get(i), methodsList, variables);
-            block.checkBlock();
+        Block mainBlock = new Block(blocksLst.get(0), methodsList, defaultVar);
+        mainBlock.checkBlock();
+        for (int i = 1; i < blocksLst.size(); i++) {
+            if (blockLines.get(i).getFirst() > blockLines.get(i - 1).getSecond()) {
+                    variables = defaultVar;
+            }else{
+                variables.putAll(defaultVar);
+                Block block = new Block(blocksLst.get(i), methodsList, variables);
+                block.checkBlock();
         }
-        methodEnding(blocksLst.get(0));
-
-
     }
+    methodEnding(blocksLst.get(0));
+
+
+}
 
     private void methodEnding(List<Pair<String, Integer>> mainBlock) throws BlockException {
         // Check the main block(the method structure)
@@ -109,10 +118,10 @@ public class Method {
         return blockLines;
     }
 
-    private int getLastLineBlock(List<Pair<Integer,Integer>> blocks){
+    private int getLastLineBlock(List<Pair<Integer, Integer>> blocks) {
         int maxLine = 0;
-        for(Pair<Integer,Integer> p:blocks){
-            if(p.getSecond() > maxLine){
+        for (Pair<Integer, Integer> p : blocks) {
+            if (p.getSecond() > maxLine) {
                 maxLine = p.getSecond();
             }
         }
