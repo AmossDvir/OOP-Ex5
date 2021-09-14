@@ -54,7 +54,7 @@ public class StringManipulations {
      */
     public static String fixBlankSpots(String str) {
         str = str.trim();
-        str = str.replaceAll("\\s{2,}", WHITE_SPACE);
+        str = str.replaceAll("(\\s{2,})"," ");
         return str;
     }
 
@@ -66,6 +66,6 @@ public class StringManipulations {
 
     public  static  List<String>  splitToWords(String str){
         String params = fixBlankSpots(str);
-        return Arrays.asList(params.split(WHITE_SPACE));
+        return Arrays.asList(params.split("\\s"));
     }
 }

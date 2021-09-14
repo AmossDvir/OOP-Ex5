@@ -54,7 +54,7 @@ public class Block {
         lineMatcher = METHOD_CALLING_BLOCK_PATTERN.matcher(line);
         if (lineMatcher.matches()) {
             MethodCall call = new MethodCall(line, methodsList);
-            call.checkMethodCall();
+            call.checkMethodCall(variables);
             return;
         }
         // Check if line is a variable declaration or assignment:
@@ -73,7 +73,7 @@ public class Block {
      * @return
      */
     //TODO: UPDATE DECLARATIONS AND ADDING ASSIGHMENT PATTERN
-    private boolean isVar(String line) {
+    public static boolean isVar(String line) {
         Matcher intMatcher, doubleMatcher, stringMatcher, charMatcher, booleanMatcher,generalMatcher;
         intMatcher = INT_DEC_PATTERN.matcher(line);
         doubleMatcher = DOUBLE_DEC_PATTERN.matcher(line);

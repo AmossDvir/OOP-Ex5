@@ -1,5 +1,6 @@
 package syntaxchecking;
 
+import syntaxchecking.blocks.Block;
 import syntaxchecking.blocks.exceptions.BlockException;
 import syntaxchecking.methods.Method;
 import syntaxchecking.methods.declarations.VoidDeclaration;
@@ -71,6 +72,7 @@ public class CodeManager {
      */
     public void registerGlobalVars() throws VariableException {
         int lineIndex = 0;
+        boolean doContinue = false;
         // Iterate through the code lines:
         for (; lineIndex < lines.size(); lineIndex++) {
             // Check if a line is already registered as a method:
@@ -79,17 +81,26 @@ public class CodeManager {
                     if (lineIndex + p.getSecond() + 1 - p.getFirst() >= lines.size()) {
                         return;
                     } else {
-                        lineIndex += p.getSecond() +- p.getFirst()+ 1;
+                        lineIndex += p.getSecond() - p.getFirst();
+                        doContinue = true;
                     }
                 }
             }
+            if(doContinue){
+                doContinue = false;
+                continue;
+            }
             // Global variable declaration line:
+            if(Block.isVar(lines.get(lineIndex))){
             VariablesManager vm = new VariablesManager(globalVars);
             // Create new Variable:
             vm.analyzeVariableLine(lines.get(lineIndex), lineIndex, true);
+            }
+            else{
+                throw new VariableException();
+            }
         }
     }
-
 
     private void checkMethods() throws MethodException, VariableException {
         Method m;

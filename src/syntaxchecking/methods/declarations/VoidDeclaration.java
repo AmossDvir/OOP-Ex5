@@ -34,6 +34,7 @@ public class VoidDeclaration {
      */
     public static MethodsPair analyzeDeclaration(String line, Map<String, Variable> paramsMap)
             throws DeclarationException, VariableException {
+        HashSet<String> paramsSet = new HashSet<>();
 
         // Take out the parameters:
         String params = extractFromParantheses(line);
@@ -50,8 +51,11 @@ public class VoidDeclaration {
             for (String param : paramsList) {
 
                 Variable temp = analyzeParameter(param);
-                if (paramsMap.containsKey(temp.getName())){
+                if (paramsSet.contains(temp.getName())){
                     throw new VariableException();
+                }
+                else{
+                    paramsSet.add(temp.getName());
                 }
                 paramsMap.put(temp.getName(), temp);
                 typesList.add(temp.getType());

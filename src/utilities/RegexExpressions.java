@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class RegexExpressions {
 
 
-    private static final String VOID_METHODS_DECLARATION = "\\s*void\\s*[a-zA-Z]+\\w*\\s*\\(.*\\)\\s*\\{";
+    private static final String VOID_METHODS_DECLARATION = "\\s*void\\s*[a-zA-Z]+\\w*\\s*\\(.*\\)\\s*\\{\\s*";
     private static final String EXTRACTION = "\\((.*)\\)";
     private static final String PARAMS_NAME = "([a-zA-Z]\\w*|_\\w+)";
     private static final String CLOSING_BRACKETS = "\\s*\\}\\s*";
@@ -88,7 +88,7 @@ public class RegexExpressions {
     private static final String IF_WHILE_BLOCK = "\\s*(if|while)\\s*\\(.*\\)\\s*\\{\\s*";
     private static final String RETURN_BLOCK = "\\s*return\\s*;\\s*";
     private static final String METHOD_CALLING_BLOCK =
-            "^\\s*(?!\\s*if\\s*\\(+.*\\)+\\s*\\{+\\s*$|\\s*while\\s*\\(+.*\\)+\\s*\\{+\\s*$)\\S*\\s*\\(+.*\\)+\\s*;\\s*$";
+            "\\s*(?!\\s*if\\s*\\(+.*\\)+\\s*\\{+\\s*$|\\s*while\\s*\\(+.*\\)+\\s*\\{+\\s*$)\\s*\\S*\\s*\\(.*\\)\\s*;\\s*";
 
     // Compile Regexes:
     public static final Pattern IF_WHILE_BLOCK_PATTERN = Pattern.compile(IF_WHILE_BLOCK);
@@ -98,7 +98,7 @@ public class RegexExpressions {
     // TODO: TEST ZONE,DELETE!!!
     public static void main(String[] args) {
 
-        Matcher intvar = INT_DEC_PATTERN.matcher("final int a = 4;");
+        Matcher intvar = METHOD_CALLING_BLOCK_PATTERN.matcher("\t\tfoo2                (            5          , 7   );");
         if(!intvar.matches()){
             System.out.println("wrong at closing bracket");
         }

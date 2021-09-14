@@ -33,6 +33,7 @@ public class Method {
         this.methodsList = methodsList;
         checkedLines = new HashSet<>();
         defaultVar.putAll(globalVars);
+        this.variables = globalVars;
     }
 
     /**
@@ -44,22 +45,27 @@ public class Method {
         List<Pair<Integer, Integer>> blockLines = registerBlocks();
         List<List<Pair<String, Integer>>> blocksLst = cutAndArrangeBlock(blockLines);
         Collections.reverse(blockLines);
-        // Check block by block
-        Block mainBlock = new Block(blocksLst.get(0), methodsList, defaultVar);
-        mainBlock.checkBlock();
-        for (int i = 1; i < blocksLst.size(); i++) {
-            if (blockLines.get(i).getFirst() > blockLines.get(i - 1).getSecond()) {
-                    variables = defaultVar;
-            }else{
-                variables.putAll(defaultVar);
-                Block block = new Block(blocksLst.get(i), methodsList, variables);
-                block.checkBlock();
+        // Check main block:
+        Block block = new Block(blocksLst.get(0), methodsList, defaultVar);
+        block.checkBlock();
+        // Check first block:
+        if(blocksLst.size() > 1){
+            variables.putAll(defaultVar);
+            block = new Block(blocksLst.get(1), methodsList, variables);
+            block.checkBlock();
         }
+        // Check other blocks:
+        for (int i = 2; i < blocksLst.size(); i++) {
+            if (blockLines.get(i-1).getSecond() < blockLines.get(i-2).getFirst()) {
+                variables = defaultVar;
+            } else {
+                variables.putAll(defaultVar);
+            }
+            block = new Block(blocksLst.get(i), methodsList, variables);
+            block.checkBlock();
+        }
+        methodEnding(blocksLst.get(0));
     }
-    methodEnding(blocksLst.get(0));
-
-
-}
 
     private void methodEnding(List<Pair<String, Integer>> mainBlock) throws BlockException {
         // Check the main block(the method structure)

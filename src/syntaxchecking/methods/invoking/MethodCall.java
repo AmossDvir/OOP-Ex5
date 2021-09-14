@@ -1,6 +1,8 @@
 package syntaxchecking.methods.invoking;
 
 import syntaxchecking.methods.exceptions.InvokingException;
+import syntaxchecking.variables.Variable;
+import syntaxchecking.variables.VariableException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +41,7 @@ public class MethodCall {
 
     public String extractMethodName(String line) {
         line = line.trim();
-        return line.substring(0, line.indexOf("("));
+        return line.substring(0, line.indexOf("(")).trim();
 
     }
 
@@ -48,7 +50,7 @@ public class MethodCall {
      *
      * @throws InvokingException: in case the method call isn't valid.
      */
-    public void checkMethodCall() throws InvokingException {
+    public void checkMethodCall(Map<String, Variable> variables) throws InvokingException {
         // Check if such a method exists:
         if (!methodList.containsKey(methodCalledName)) {
             throw new InvokingException();
@@ -71,10 +73,18 @@ public class MethodCall {
         for (int i = 0; i < paramsList.size(); i++) {
             String param = paramsList.get(i).trim();
             String wantedType = methodValidTypes.get(i);
-            if (!isInstanceOf(wantedType, param)) {
-                throw new InvokingException();
+            // Check if param is not a known variable and illegal:
+            if (!variables.containsKey(param)) {
+                if (!isInstanceOf(wantedType, param)) {
+                    throw new InvokingException();
+                }
+                // param is a known variable:
+            } else {
+                // Check if illegal:
+                if (!variables.get(param).getType().equals(wantedType)) {
+                    throw new InvokingException();
+                }
             }
         }
     }
 }
-
